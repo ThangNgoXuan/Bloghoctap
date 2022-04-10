@@ -1,0 +1,4 @@
+.home-container {
+    min-height: calc(100vh - 250px);
+    background-color: #eef0f1;
+}

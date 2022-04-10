@@ -63,10 +63,11 @@
 }
 
 .navbar .container .navbar-collapse .login{
-    background-color: #4f299b;
+    background-color: #3b49df;
     width: 7vw;
-    border-radius: 8px;
+    border-radius: 4px;
     margin-right: 1vw;
+    font-size: 16px;
 }
 
 .navbar .container .navbar-collapse .login:hover{
@@ -74,9 +75,9 @@
 }
 
 .navbar .container .navbar-collapse .signup{
-    background-color: #4f299b;
+    background-color: #3b49df;
     width: 7vw;
-    border-radius: 8px;
+    border-radius: 4px;
     margin-right: 1vw;
 }
 

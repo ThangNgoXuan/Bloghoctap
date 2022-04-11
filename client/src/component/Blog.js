@@ -3,7 +3,8 @@ import "../css/blog.css"
 import { 
     Container,
     Row,
-    Col
+    Col,
+    Button
 
 } from "react-bootstrap"
 import NavBar from "./NavBar"
@@ -13,6 +14,7 @@ import { FaRegComment } from "react-icons/fa"
 import {BsFillBookmarkFill} from "react-icons/bs"
 import {MdMoreHoriz} from "react-icons/md"
 import imgtitle from "../image/image.png"
+import avatar from "../image/avatar.jpg"
 
 export default function Blog() {
     return (
@@ -45,13 +47,11 @@ export default function Blog() {
                             <div className="blog-image">
                                 <img src={imgtitle}/>
                             </div>
-
-                            <div className="blog-title">
-                                Danh sách các Framework để tạo ra các ý tưởng khi làm Product
-                            </div>
-
                             <div className="blog-content">
-                                <pre>
+                                <div className="blog-title">
+                                    Danh sách các Framework để tạo ra các ý tưởng khi làm Product
+                                </div>
+                                <p>{`
                                 1. Ask why in a hard way
                                 ・Tại sao lại chưa có thang máy để đi thẳng lên vũ trụ?
                                 ・Tại sao chỉ có thể pha cà phê bằng nước nóng?
@@ -83,12 +83,35 @@ export default function Blog() {
                                 Ở giai đoạn hình thành ý tưởng, bạn càng có nhiều thuộc tính(khía cạnh) bạn càng có thể nhận thấy nhiều điểm mù.
 
                                 To be continue...
-                                </pre>
+                                `}
+                                </p>
                             </div>
+                            
+                        
+                            <div className="blog-comment">
+                                <div className="my-comment">
+                                    mycommit
+                                </div>
+
+                                <div className="general-comment">
+                                    comment chung
+                                </div>
+                            </div>
+
+
                         </div>
                     </div>
                     <div className="col col-md-3 not3">
-
+                        <div className="follow-container">
+                            <div className="header-black"></div>
+                            <div className="following">
+                                <div className="name">
+                                    <img src={avatar} className="name-avatar"/>
+                                    Thắng Ngô
+                                </div>
+                                <Button>Following</Button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </Container>

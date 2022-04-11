@@ -89,12 +89,41 @@ export default function Blog() {
                             
                         
                             <div className="blog-comment">
-                                <div className="my-comment">
-                                    mycommit
+                                
+                                <h1>Discussion</h1>
+                                <div className="my-comment row">
+                                      <div className="col-md-1 img-col">
+                                        <img src={avatar} className="name-avatar"/>
+                                    </div>
+                                    <div className="area-comment col-md-11"> 
+                                        <textarea 
+                                        type="text"
+                                        placeholder="Add to the discussion"
+                                        />
+                                        <br/>
+                                        <Button>Submit</Button>
+                                    </div>
+                           
                                 </div>
-
-                                <div className="general-comment">
-                                    comment chung
+                               
+                                <div className="general-comment row">
+                                    <div className="col-md-1 img-col ">
+                                        <img src={avatar} className="name-avatar"/>
+                                    </div>
+                                    <div className="area-comment col-md-11"> 
+                                        <span>Thắng Ngô</span>
+                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has</p>                                        
+                                    </div>
+                                </div>
+                                
+                                <div className="general-comment row">
+                                    <div className="col-md-1 img-col ">
+                                        <img src={avatar} className="name-avatar"/>
+                                    </div>
+                                    <div className="area-comment col-md-11"> 
+                                        <span>Thắng Ngô</span>
+                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has</p>                                        
+                                    </div>
                                 </div>
                             </div>
 
@@ -106,7 +135,7 @@ export default function Blog() {
                             <div className="header-black"></div>
                             <div className="following">
                                 <div className="name">
-                                    <img src={avatar} className="name-avatar"/>
+                                    <img src={avatar}/>
                                     Thắng Ngô
                                 </div>
                                 <Button>Following</Button>

@@ -1,4 +1,129 @@
 .home-container {
     min-height: calc(100vh - 260px);
     background-color: #eef0f1;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+
+}
+
+.container {
+    margin: 0 auto;
+    padding: 16px;
+}
+
+.search-area {
+    
+}
+
+.content-area {
+    background-color: #eef0f1;
+    padding-right: 20px;
+}
+
+.more-area {
+    background-color: #fff;
+    min-height: 550px;
+    border-radius: 5px;
+}
+
+#menu ul {
+    list-style: none;
+    padding: 0;
+}
+
+#menu ul li {
+    padding: 8px 0;
+    border-radius: 5px;
+}
+
+.li-item{
+    text-decoration: none;
+    font-size: 16px;
+    color: #202428;
+    font-weight: 400;
+    padding: 5px 5px;
+    width: 100%;
+}
+
+a.li-item:hover {
+    background-color: #e2e4e6;
+    color: #323ebe;
+}
+
+
+
+#menu ul li a.li-title {
+    font-size: 16px;
+    color: #08090a;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+#menu ul li a svg {
+    width: 24px;
+    height: 24px;
+    margin-right: 5px;
+}
+
+.content-area h1 {
+    font-size: 20px;
+    font-weight: 700;
+    padding: 20px 0;
+}
+
+.content-area .blog-item {
+    width: 100%;
+    background-color: #fff;
+    border-radius: 5px;
+}
+.blog-item {
+    margin-bottom: 20px;
+}
+
+.blog-item a img{
+    width: 100%;
+    border-radius: 5px;
+    height: 270px;
+    object-fit: cover;
+}
+
+.blog-item a .blog-item-content{
+    padding: 16px;
+}
+
+.blog-item a {
+    text-decoration: none;
+}
+
+.blog-item a .blog-item-content .author{
+    color: #363d44;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: flex-end;
+}
+
+.blog-item a .blog-item-content .author img {
+    height: 32px;
+    width: 32px;
+    border-radius: 50%;
+    margin-right: 10px;
+
+}
+
+.blog-item a .blog-item-content .author-title {
+    padding-left: 40px;
+    font-size: 30px;
+    color: #08090a;
+    font-weight: 700;
+}
+
+.blog-item a .blog-item-content .author-title svg{
+    width: 24px;
+    height: 24px;
+    margin-right: 5px;
+}
+
+.blog-item a .blog-item-content .author-title span {
+    font-size: 12px;
+    font-weight: 400;
 }

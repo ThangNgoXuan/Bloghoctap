@@ -15,7 +15,7 @@
     width: 300px;
     color: #ffffff;
     margin-left: 2vw;
-    border: none;
+    border: 1px solid #b5bdc4;
 }
 
 .navbar .container .navbar-collapse form input:focus{
@@ -30,7 +30,7 @@
 }
 
 .navbar .container .navbar-collapse form button:hover{
-    background-color: #9a33d6;
+    background-color: #5133d6;
 }
 
 .navbar .container .navbar-collapse .new-post{

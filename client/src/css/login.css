@@ -27,6 +27,35 @@
 .signup-container .card .talk-about {
     font-size: 16px;
     padding: 10px 0 0;
+    text-align: center;
+}
+
+.signup-container .card .drop-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 0;
+    font-weight: bold;
+}
+
+.signup-container .card .drop-line hr {
+    width: 40%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.signup-container .card .drop-line.drop-signin {
+    font-weight: 300;
+}
+
+.drop-link {
+    text-decoration: none;
+    font-weight: 400;
+}
+
+.signup-container .card .drop-line.drop-signin hr {
+    width: 25%;
 }
 
 .signup-container .card .button-login {
@@ -60,15 +89,28 @@
     width: 90%;
 }
 
+.signup-container .card form .form-label {
+    font-weight: bold;
+    color: #202428;
+}
+
+.signup-container .card form .form-control {
+    height: 40px;
+    background-color: #f9fafa;
+    border: 1px solid #b5bdc4;
+    width: 100%;
+}
+
 .signup-container .card form button{
-    background-color: #c67cf1;
-    width: 10vw;
+    background-color: #3b49df;
     color: #ffffff;
-    border-radius: 10px;
-    font-size: 1.3rem;
+    border-radius: 5px;
+    font-size: 1rem;
     font-weight: 500;
     cursor: pointer;
-    border: #c67cf1;
+    border: 0px;
+    line-height: 1.5rem;
+    padding: 0.5rem 1rem;
 }
 
 .signup-container .card .error p{

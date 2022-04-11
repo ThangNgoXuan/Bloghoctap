@@ -87,19 +87,19 @@ export default function Signup() {
                     <p className="talk-about"><a href="/">Bolg học tập Việt Nam</a> là cộng đồng trao đổi cho cái thành viên </p>
                     
                     <Button className="button-login button-google">                        
-                           <AiFillGoogleCircle/> Đăng nhập với Google
+                           <AiFillGoogleCircle/> Đăng kí với Google
                     </Button>
                     
                     <Button className="button-login button-facebook">                        
-                           <AiFillFacebook/> Đăng nhập với Facebook
+                           <AiFillFacebook/> Đăng kí với Facebook
                     </Button>
-
+                    <br/> 
+                    <p className="drop-line"> <hr/> Hoặc <hr/> </p>
                     <Form noValidate validated={validated} onSubmit={handleSubmit}>
                         <Form.Group className="mb-3">
-                        <Form.Label>Name</Form.Label>
+                        <Form.Label>Tên</Form.Label>
                         <Form.Control
                             type="text"
-                            placeholder="Enter Name"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             required
@@ -109,10 +109,9 @@ export default function Signup() {
                         </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group className="mb-3">
-                        <Form.Label>Email address</Form.Label>
+                        <Form.Label>Email</Form.Label>
                         <Form.Control
                             type="email"
-                            placeholder="Enter email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
@@ -122,10 +121,9 @@ export default function Signup() {
                         </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group className="mb-3">
-                        <Form.Label>Password</Form.Label>
+                        <Form.Label>Mật khẩu</Form.Label>
                         <Form.Control
                             type="password"
-                            placeholder="Password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
@@ -135,10 +133,9 @@ export default function Signup() {
                         </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group className="mb-3">
-                        <Form.Label>Confirm Password</Form.Label>
+                        <Form.Label>Nhập lại mật khẩu</Form.Label>
                         <Form.Control
-                            type="password"
-                            placeholder="Confirm Password"
+                            type="password"            
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             required
@@ -156,10 +153,10 @@ export default function Signup() {
                             {submitting ? (
                             <Spinner as="span" animation="border" role="status" />
                             ) : (
-                            "Submit"
+                            "Đăng kí"
                             )}
                         </Button>
-                  
+                        <p className="drop-line drop-signin"><hr/><spa>Bạn đã có tài khoản?<a className="drop-link" href="/login"> Đăng nhập</a></spa><hr/></p>        
                     </Form>
                     <div className="error">{error && <p>{errorMsg}</p>}</div>
                     </Card.Body>

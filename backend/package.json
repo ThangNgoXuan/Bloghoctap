@@ -1,7 +1,6 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "type":"module",
   "scripts": {
@@ -10,6 +9,7 @@
   },
   "author": "",
   "license": "ISC",
+<<<<<<< HEAD
   "dependencies": {
     "@elastic/elasticsearch": "^7.0.1",
     "dotenv": "^16.0.0",
@@ -20,4 +20,7 @@
   "devDependencies": {
     "nodemon": "^2.0.15"
   }
+=======
+  "description": ""
+>>>>>>> 1f6e350113ec1c5b2cb78ce54f41f567c82ddb19
 }

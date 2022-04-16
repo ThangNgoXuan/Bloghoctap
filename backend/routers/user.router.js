@@ -6,12 +6,14 @@ const userRouter = express.Router();
 userRouter.get('/', async (req, res) => {
     await client.search({
         index: 'usersdb',
+        type: "_doc",
         body: {
             query: { match_all: {} }
         }
     }, function (err, resp, status) {
-        console.log(resp);
-        res.send(resp)
+        // console.log(resp);
+        const result = resp.body.hits.hits;
+        res.send({ total: result.length, result })
     });
 
 });
@@ -19,7 +21,7 @@ userRouter.get('/', async (req, res) => {
 userRouter.get('/search', async (req, res) => {
 
     const query = req.query.query;
-    console.log(query)
+    //  console.log(query)
     if (query) {
         const result = await client.search({
             index: 'usersdb',
@@ -44,7 +46,27 @@ userRouter.get('/search', async (req, res) => {
 
 })
 
+userRouter.post('/user', async (req, res) => {
 
+    const { first_name, last_name, id, email, gender, username } = req.body;
+    console.log(req.body)
+    client.index({
+        index: 'usersdb',
+        type: '_doc',
+        body: {
+            "id": id,
+            "first_name": first_name,
+            "last_name": last_name,
+            "email": email,
+            "username": username,
+            "gender": gender,
+        }
+    }, function (err, resp, status) {
+        // console.log(resp);
+        res.send(resp);
+    });
+
+})
 
 
 export default userRouter;

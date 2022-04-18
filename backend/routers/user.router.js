@@ -1,7 +1,10 @@
 import express from 'express';
-import client from '../connection.js';
-
 const userRouter = express.Router();
+
+import client from '../connection.js';
+import { createUser, createUserPolicy } from '../validations/user.validation.js'
+import validate from '../middleware/validate.js'
+import { test, registUser, loginUser } from '../controllers/user.controller.js'
 
 userRouter.get('/', async (req, res) => {
     await client.search({
@@ -12,8 +15,14 @@ userRouter.get('/', async (req, res) => {
         }
     }, function (err, resp, status) {
         // console.log(resp);
-        const result = resp.body.hits.hits;
-        res.send({ total: result.length, result })
+        // console.log(err);
+        console.log(resp);
+        // console.log(status);
+        if (resp.body) {
+            const result = resp.body.hits.hits;
+            res.send({ total: result.length, result });
+            return;
+        }
     });
 
 });
@@ -46,27 +55,29 @@ userRouter.get('/search', async (req, res) => {
 
 })
 
-userRouter.post('/user', async (req, res) => {
+// userRouter.post('/user', async (req, res) => {
 
-    const { first_name, last_name, id, email, gender, username } = req.body;
-    console.log(req.body)
-    client.index({
-        index: 'usersdb',
-        type: '_doc',
-        body: {
-            "id": id,
-            "first_name": first_name,
-            "last_name": last_name,
-            "email": email,
-            "username": username,
-            "gender": gender,
-        }
-    }, function (err, resp, status) {
-        // console.log(resp);
-        res.send(resp);
-    });
+//     const { first_name, last_name, id, email, gender, username } = req.body;
+//     console.log(req.body)
+//     client.index({
+//         index: 'usersdb',
+//         type: '_doc',
+//         body: {
+//             "id": id,
+//             "first_name": first_name,
+//             "last_name": last_name,
+//             "email": email,
+//             "username": username,
+//             "gender": gender,
+//         }
+//     }, function (err, resp, status) {
+//         // console.log(resp);
+//         res.send(resp);
+//     });
 
-})
+// })
 
+userRouter.post('/user', validate(createUser), registUser)
+userRouter.post('/user/login', loginUser)
 
 export default userRouter;

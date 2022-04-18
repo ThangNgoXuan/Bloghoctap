@@ -1,7 +1,7 @@
 import express from 'express';
 import client from './connection.js';
-// require('dotenv').config();
 import userRouter from './routers/user.router.js';
+
 const app = express();
 
 // parse json request body
@@ -29,7 +29,5 @@ app.get('/api/user/:username', (req, res) => {
     });
 
 })
-
-
 
 app.listen(5000, () => console.log('server running at 5000'));

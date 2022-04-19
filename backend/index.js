@@ -1,6 +1,6 @@
 import express from 'express';
 import client from './connection.js';
-import userRouter from './routers/user.router.js';
+import { api } from './routers/index.js';
 
 const app = express();
 
@@ -10,7 +10,7 @@ app.use(express.json());
 // parse urlencoded request body
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/api', userRouter);
+app.use('/api', api);
 
 
 app.get('/api/user/:username', (req, res) => {

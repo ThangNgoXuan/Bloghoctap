@@ -1,5 +1,4 @@
 import uniqid from 'uniqid';
-import catchAsync from "../middleware/catchAsync.js";
 import client from '../connection.js';
 
 const userIndex = 'usersdb';
@@ -41,20 +40,51 @@ const registUser = async (req, res) => {
 }
 
 const loginUser = async (req, res) => {
-    const { username, email, password } = req.body
+    const { username, password } = req.body
 
     try {
         const result = await client.search({
             index: userIndex,
-            query: {
-                match: {
-                    username: username,
-                    password: password,
+            body: {
+                query: {
+                    bool: {
+                        must: [
+                            { match: { username: username } },
+                            { match: { password: password } },
+                        ]
+                    }
                 }
             }
         })
-        if (result) {
-            res.send(result)
+        if (result.body.hits.total.value === 1) {
+            res.send({ success: "Đăng nhập thành công" });
+            return;
+        }
+    } catch (error) {
+        console.log(error)
+        let err = error.name ? { error: error.name } : error
+        res.send(err);
+    }
+}
+
+const getAll = async (req, res) => {
+    const { from = 0, size = 10 } = req.query;
+
+    try {
+        const result = await client.search({
+            index: userIndex,
+            from: from,
+            size: size,
+            // type: "_doc",
+            body: {
+                query: { match_all: {} }
+            },
+
+        });
+        if (result.body) {
+            const data = result.body.hits.hits;
+            res.send({ total: data.length, data });
+            return;
         }
     } catch (error) {
         let err = error.name ? { error: error.name } : error
@@ -62,8 +92,4 @@ const loginUser = async (req, res) => {
     }
 }
 
-export const test = catchAsync((req, res) => {
-
-})
-
-export { registUser, loginUser }
+export { registUser, loginUser, getAll }

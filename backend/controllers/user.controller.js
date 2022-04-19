@@ -1,7 +1,7 @@
 import uniqid from 'uniqid';
 import client from '../connection.js';
 
-const userIndex = 'usersdb';
+const userIndex = 'users';
 
 const registUser = async (req, res) => {
     const { username, email, password, name } = req.body
@@ -13,7 +13,6 @@ const registUser = async (req, res) => {
             index: userIndex,
             type: '_doc',
             body: {
-                "id": uniqid(),
                 "name": name,
                 "email": email,
                 "username": username,
@@ -24,7 +23,7 @@ const registUser = async (req, res) => {
 
             if (resp.body) {
                 // const result = resp.body.hits.hits;
-                // res.send({ total: result.length, result });
+                res.send({ success: "Create user success" });
                 console.log(resp.body);
                 return;
             } else if (err) {

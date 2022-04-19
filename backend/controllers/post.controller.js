@@ -70,4 +70,30 @@ const getAllPost = async (req, res) => {
     }
 }
 
-export { newPost, getAllPost }
+const getPostBySlug = async (req, res) => {
+    const { slug } = req.params;
+
+    try {
+        const result = await client.search({
+            index: userIndex,
+            body: {
+                query: {
+                    match: {
+                        "slug": slug
+                    }
+                }
+            },
+
+        });
+        if (result.body) {
+            const data = result.body.hits.hits;
+            res.send({ total: data.length, data });
+            return;
+        }
+    } catch (error) {
+        let err = error.name ? { error: error.name } : error
+        res.send(err);
+    }
+}
+
+export { newPost, getAllPost, getPostBySlug }

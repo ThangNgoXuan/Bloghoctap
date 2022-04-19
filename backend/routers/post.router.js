@@ -1,6 +1,8 @@
 import express from 'express';
 const postRouter = express.Router();
-import { newPost, getAllPost } from '../controllers/post.controller.js'
+import { newPost, getAllPost, getPostBySlug } from '../controllers/post.controller.js'
+
+postRouter.route('/:slug').get(getPostBySlug)
 
 postRouter.route('/')
     .get(getAllPost)

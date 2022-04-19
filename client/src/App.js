@@ -6,27 +6,24 @@ import CreatePost from "./component/CreatePorst";
 import EditPost from "./component/EditPost";
 import Blog from "./component/Blog";
 import Search from "./component/Search";
-import { BrowserRouter, Routes, Route} from "react-router-dom"
+import { BrowserRouter, Routes, Route } from "react-router-dom"
 import React from "react";
-
-
-
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route exact path="/" element={<Home/>}/>
-        <Route exact path="/login" element={<Login/>}/>
-        <Route exact path="/signup" element={<Signup/>}/>
-        <Route exact path="/createpost" element={<CreatePost/>}/>
-        <Route exact path="/editpost" element={<EditPost/>}/>
-        <Route exact path="/profile" element={<Profile/>}/>
-        <Route exact path="/blog" element={<Blog/>}/>
-        <Route exact path="/search" element={<Search/>}/>
-        
+        <Route exact path="/" element={<Home />} />
+        <Route exact path="/login" element={<Login />} />
+        <Route exact path="/signup" element={<Signup />} />
+        <Route exact path="/createpost" element={<CreatePost />} />
+        <Route exact path="/editpost" element={<EditPost />} />
+        <Route exact path="/profile" element={<Profile />} />
+        <Route exact path="/blog" element={<Blog />} />
+        <Route exact path="/search" element={<Search />} />
+
       </Routes>
-    
+
     </BrowserRouter>
   );
 }

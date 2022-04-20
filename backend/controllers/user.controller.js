@@ -1,0 +1,95 @@
+import uniqid from 'uniqid';
+import client from '../connection.js';
+
+const userIndex = 'usersdb';
+
+const registUser = async (req, res) => {
+    const { username, email, password, name } = req.body
+
+    //can kiem tra email or user ton tai hay ko
+    try {
+        let err;
+        client.index({
+            index: userIndex,
+            type: '_doc',
+            body: {
+                "id": uniqid(),
+                "name": name,
+                "email": email,
+                "username": username,
+                "password": password,
+                "dateCreated": Date.now()
+            }
+        }, function (err, resp) {
+
+            if (resp.body) {
+                // const result = resp.body.hits.hits;
+                // res.send({ total: result.length, result });
+                console.log(resp.body);
+                return;
+            } else if (err) {
+                err = err;
+                res.status(404).send({ error: err.name });
+                return;
+            }
+        });
+    } catch (error) {
+        res.send(error);
+        // console.log(error)
+    }
+}
+
+const loginUser = async (req, res) => {
+    const { username, password } = req.body
+
+    try {
+        const result = await client.search({
+            index: userIndex,
+            body: {
+                query: {
+                    bool: {
+                        must: [
+                            { match: { username: username } },
+                            { match: { password: password } },
+                        ]
+                    }
+                }
+            }
+        })
+        if (result.body.hits.total.value === 1) {
+            res.send({ success: "Đăng nhập thành công" });
+            return;
+        }
+    } catch (error) {
+        console.log(error)
+        let err = error.name ? { error: error.name } : error
+        res.send(err);
+    }
+}
+
+const getAll = async (req, res) => {
+    const { from = 0, size = 10 } = req.query;
+
+    try {
+        const result = await client.search({
+            index: userIndex,
+            from: from,
+            size: size,
+            // type: "_doc",
+            body: {
+                query: { match_all: {} }
+            },
+
+        });
+        if (result.body) {
+            const data = result.body.hits.hits;
+            res.send({ total: data.length, data });
+            return;
+        }
+    } catch (error) {
+        let err = error.name ? { error: error.name } : error
+        res.send(err);
+    }
+}
+
+export { registUser, loginUser, getAll }

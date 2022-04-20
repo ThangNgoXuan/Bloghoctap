@@ -2,7 +2,7 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "index.js",
-  "type":"module",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon index.js"
@@ -10,11 +10,16 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@elastic/elasticsearch": "^7.0.1",
+    "@elastic/elasticsearch": "7.12",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
+    "http-status": "^1.5.1",
     "i": "^0.3.7",
-    "npm": "^8.6.0"
+    "joi": "^17.6.0",
+    "npm": "^8.6.0",
+    "slugify": "^1.6.5",
+    "uniqid": "^5.4.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"

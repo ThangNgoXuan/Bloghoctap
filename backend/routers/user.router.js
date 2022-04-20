@@ -1,22 +1,10 @@
-import express from 'express';
-import client from '../connection.js';
-
+import express, { Router } from 'express';
 const userRouter = express.Router();
 
-userRouter.get('/', async (req, res) => {
-    await client.search({
-        index: 'usersdb',
-        type: "_doc",
-        body: {
-            query: { match_all: {} }
-        }
-    }, function (err, resp, status) {
-        // console.log(resp);
-        const result = resp.body.hits.hits;
-        res.send({ total: result.length, result })
-    });
-
-});
+import client from '../connection.js';
+import { createUser, createUserPolicy } from '../validations/user.validation.js'
+import validate from '../utils/validate.js'
+import { registUser, loginUser, getAll } from '../controllers/user.controller.js'
 
 userRouter.get('/search', async (req, res) => {
 
@@ -46,27 +34,8 @@ userRouter.get('/search', async (req, res) => {
 
 })
 
-userRouter.post('/user', async (req, res) => {
+userRouter.route('/').get(getAll).post(validate(createUser), registUser)
 
-    const { first_name, last_name, id, email, gender, username } = req.body;
-    console.log(req.body)
-    client.index({
-        index: 'usersdb',
-        type: '_doc',
-        body: {
-            "id": id,
-            "first_name": first_name,
-            "last_name": last_name,
-            "email": email,
-            "username": username,
-            "gender": gender,
-        }
-    }, function (err, resp, status) {
-        // console.log(resp);
-        res.send(resp);
-    });
-
-})
-
+userRouter.post('/login', loginUser)
 
 export default userRouter;

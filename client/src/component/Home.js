@@ -11,6 +11,7 @@ import { DiCloud9 } from "react-icons/di";
 import imgtitle from "../image/image.png"
 import avatar from "../image/avatar.jpg"
 import { FcLike } from "react-icons/fc"
+import { AiFillHome } from "react-icons/ai"
 import Axios from 'axios';
 
 export default function Home() {
@@ -103,10 +104,8 @@ export default function Home() {
                         </div>
                     </div>
                 </Container>
-
             </div>
             <Footer />
         </>
     )
 }
-

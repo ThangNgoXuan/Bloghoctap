@@ -19,7 +19,7 @@ function App() {
         <Route exact path="/createpost" element={<CreatePost />} />
         <Route exact path="/editpost" element={<EditPost />} />
         <Route exact path="/profile" element={<Profile />} />
-        <Route exact path="/blog" element={<Blog />} />
+        <Route exact path="/blog/:slug" element={<Blog />} />
         <Route exact path="/search" element={<Search />} />
 
       </Routes>

@@ -1,4 +1,4 @@
-import uniqid from 'uniqid';
+import generateToken from '../utils/generateToken.js';
 import client from '../connection.js';
 
 const userIndex = 'users';
@@ -40,7 +40,7 @@ const registUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
     const { username, password } = req.body
-
+    console.log(username)
     try {
         const result = await client.search({
             index: userIndex,
@@ -55,9 +55,18 @@ const loginUser = async (req, res) => {
                 }
             }
         })
-        if (result.body.hits.total.value === 1) {
-            res.send({ success: "Đăng nhập thành công" });
+        if (result.body.hits.total.value >= 1) {
+            // console.log(result.body.hits.hits)
+            const data = result.body.hits.hits[0];
+            const user = {
+                name: data._source.name,
+                id: data._id,
+                token: generateToken(data._id),
+            }
+            res.send({ success: "Đăng nhập thành công", user });
             return;
+        } else {
+            res.send({ error: "Sai tài khoản hoặc mật khẩu" })
         }
     } catch (error) {
         console.log(error)

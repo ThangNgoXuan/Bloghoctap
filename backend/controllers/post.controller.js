@@ -5,10 +5,10 @@ import slugify from 'slugify';
 const userIndex = 'posts';
 
 const newPost = async (req, res) => {
-    const { author, tags, isPublish = true, title, coverImg } = req.body
+    const { author, tags, isPublish = true, title, coverImg, content, like = 0, comment = [] } = req.body
     let publishedAt = "";
     if (isPublish) publishedAt = Date.now()
-    console.log("post")
+
     try {
         let err;
         client.index({
@@ -19,19 +19,21 @@ const newPost = async (req, res) => {
                 "slug": slugify(title),
                 "tags": tags || [],
                 "coverImg": coverImg || "https://www.browsewire.net/wp-content/uploads/2017/11/blog-img.jpg",
-                "content": Date.now(),
+                "content": content,
                 "isPublish": isPublish,
                 "publishedAt": publishedAt,
                 "createdAt": Date.now(),
                 "author": author,
-                "comments": []
+                "like": like,
+                "comment": comment,
 
             }
         }, function (err, resp) {
 
             if (resp.body) {
-                console.log(resp.body);
-                res.send({ success: "Add blog success!" })
+
+                res.send(resp)
+                // res.send({ success: "Add blog success!" })
                 return;
             } else if (err) {
                 err = err;
@@ -70,4 +72,31 @@ const getAllPost = async (req, res) => {
     }
 }
 
-export { newPost, getAllPost }
+const getPostBySlug = async (req, res) => {
+    const { slug } = req.params;
+    console.log(slug)
+
+    try {
+        const result = await client.search({
+            index: userIndex,
+            body: {
+                query: {
+                    match: {
+                        slug
+                    }
+                }
+            },
+
+        });
+        if (result.body) {
+            const data = result.body.hits.hits;
+            res.send({ total: data.length, data });
+            return;
+        }
+    } catch (error) {
+        let err = error.name ? { error: error.name } : error
+        res.send(err);
+    }
+}
+
+export { newPost, getAllPost, getPostBySlug }

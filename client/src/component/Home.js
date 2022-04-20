@@ -10,9 +10,10 @@ import { DiCoda } from "react-icons/di";
 import { DiCloud9 } from "react-icons/di";
 import imgtitle from "../image/image.png"
 import avatar from "../image/avatar.jpg"
-import {FcLike} from "react-icons/fc"
-import {AiFillHome} from "react-icons/ai"
+import { FcLike } from "react-icons/fc"
+import { AiFillHome } from "react-icons/ai"
 import Axios from 'axios';
+import { Link } from "react-router-dom"
 
 export default function Home() {
     const [posts, setPosts] = useState([]);
@@ -78,7 +79,7 @@ export default function Home() {
                                 posts.map((post) => {
                                     return (
                                         <div key={post._id} className="blog-item">
-                                            <a href="/blog">
+                                            <Link to={`/blog/${post._source.slug}`}>
                                                 <img src={post._source.coverImg} />
                                                 <div className="blog-item-content">
                                                     <div className="author">
@@ -91,7 +92,7 @@ export default function Home() {
                                                         <FcLike /><span>Reactions</span>
                                                     </div>
                                                 </div>
-                                            </a>
+                                            </Link>
                                         </div>
                                     )
                                 })
@@ -109,4 +110,3 @@ export default function Home() {
         </>
     )
 }
-

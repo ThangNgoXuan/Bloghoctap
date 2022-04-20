@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from "react"
+import React, { useState, useEffect } from "react"
 import NavBar from "./NavBar"
 import Footer from "./Footer"
-import { 
+import {
     Container,
     Card,
     Form,
@@ -9,10 +9,11 @@ import {
     Spinner
 } from "react-bootstrap"
 import "../css/login.css"
+import "../css/navbar.css"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
-import {AiFillGoogleCircle} from "react-icons/ai"
-import {AiFillFacebook} from "react-icons/ai"
+import { AiFillGoogleCircle } from "react-icons/ai"
+import { AiFillFacebook } from "react-icons/ai"
 
 
 export default function Signup() {
@@ -29,7 +30,7 @@ export default function Signup() {
 
     useEffect(() => {
         if (localStorage.getItem("token")) {
-        navigate("/");
+            navigate("/");
         }
     }, [navigate]);
 
@@ -38,133 +39,133 @@ export default function Signup() {
         setSubmitting(true);
         event.preventDefault();
         if (form.checkValidity() === false) {
-        event.stopPropagation();
-        return;
+            event.stopPropagation();
+            return;
         }
 
         if (password !== confirmPassword) {
-        setError(true);
-        setErrorMsg("Passwords do not match");
-        setTimeout(() => {
-            setError(false);
-            setErrorMsg("");
-        }, 3000);
-        setSubmitting(false);
-        event.stopPropagation();
-        return;
+            setError(true);
+            setErrorMsg("Passwords do not match");
+            setTimeout(() => {
+                setError(false);
+                setErrorMsg("");
+            }, 3000);
+            setSubmitting(false);
+            event.stopPropagation();
+            return;
         }
 
         axios
-        .post(`${process.env.REACT_APP_BASE_URL}/api/auth/register`, {
-            name,
-            email,
-            password,
-        })
-        .then((res) => {
-            setSubmitting(false);
-            navigate("/login");
-        })
-        .catch((err) => {
-            setSubmitting(false);
-            setError(true);
-            setErrorMsg(err.response.data.error);
-            setTimeout(() => {
-            setError(false);
-            setErrorMsg("");
-            }, 3000);
-        });
+            .post(`${process.env.REACT_APP_BASE_URL}/api/auth/register`, {
+                name,
+                email,
+                password,
+            })
+            .then((res) => {
+                setSubmitting(false);
+                navigate("/login");
+            })
+            .catch((err) => {
+                setSubmitting(false);
+                setError(true);
+                setErrorMsg(err.response.data.error);
+                setTimeout(() => {
+                    setError(false);
+                    setErrorMsg("");
+                }, 3000);
+            });
 
         setValidated(true);
     };
     return (
         <>
-        <NavBar />
-        <div className="signup-container">
-            <Container>
-                <Card>
-                    <Card.Body>
-                    <Card.Title>Blog học tập Việt Nam</Card.Title>
-                    <p className="talk-about"><a href="/">Bolg học tập Việt Nam</a> là cộng đồng trao đổi cho cái thành viên </p>
-                    
-                    <Button className="button-login button-google">                        
-                           <AiFillGoogleCircle/> Đăng kí với Google
-                    </Button>
-                    
-                    <Button className="button-login button-facebook">                        
-                           <AiFillFacebook/> Đăng kí với Facebook
-                    </Button>
-                    <br/> 
-                    <p className="drop-line"> <hr/> Hoặc <hr/> </p>
-                    <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                        <Form.Group className="mb-3">
-                        <Form.Label>Tên</Form.Label>
-                        <Form.Control
-                            type="text"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            required
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            Please provide name
-                        </Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                        <Form.Label>Email</Form.Label>
-                        <Form.Control
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            Please provide email
-                        </Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                        <Form.Label>Mật khẩu</Form.Label>
-                        <Form.Control
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            Please enter password
-                        </Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group className="mb-3">
-                        <Form.Label>Nhập lại mật khẩu</Form.Label>
-                        <Form.Control
-                            type="password"            
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            required
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            Please confirm password
-                        </Form.Control.Feedback>
-                        </Form.Group>
-                       
-                        <Button
-                            variant="primary"
-                            type="submit"
-                            {...(submitting ? { disabled: true } : {})}
-                        >
-                            {submitting ? (
-                            <Spinner as="span" animation="border" role="status" />
-                            ) : (
-                            "Đăng kí"
-                            )}
-                        </Button>
-                        <p className="drop-line drop-signin"><hr/><spa>Bạn đã có tài khoản?<a className="drop-link" href="/login"> Đăng nhập</a></spa><hr/></p>        
-                    </Form>
-                    <div className="error">{error && <p>{errorMsg}</p>}</div>
-                    </Card.Body>
-                </Card>
-            </Container>
-        </div>
+            <NavBar />
+            <div className="signup-container">
+                <Container>
+                    <Card>
+                        <Card.Body>
+                            <Card.Title>Blog học tập Việt Nam</Card.Title>
+                            <p className="talk-about"><a href="/">Bolg học tập Việt Nam</a> là cộng đồng trao đổi cho cái thành viên </p>
 
-        <Footer />
+                            <Button className="button-login button-google">
+                                <AiFillGoogleCircle /> Đăng kí với Google
+                            </Button>
+
+                            <Button className="button-login button-facebook">
+                                <AiFillFacebook /> Đăng kí với Facebook
+                            </Button>
+                            <br />
+                            <p className="drop-line"> <hr /> Hoặc <hr /> </p>
+                            <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Tên</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        required
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        Please provide name
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Email</Form.Label>
+                                    <Form.Control
+                                        type="email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        Please provide email
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Mật khẩu</Form.Label>
+                                    <Form.Control
+                                        type="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        required
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        Please enter password
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Nhập lại mật khẩu</Form.Label>
+                                    <Form.Control
+                                        type="password"
+                                        value={confirmPassword}
+                                        onChange={(e) => setConfirmPassword(e.target.value)}
+                                        required
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        Please confirm password
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+
+                                <Button
+                                    variant="primary"
+                                    type="submit"
+                                    {...(submitting ? { disabled: true } : {})}
+                                >
+                                    {submitting ? (
+                                        <Spinner as="span" animation="border" role="status" />
+                                    ) : (
+                                        "Đăng kí"
+                                    )}
+                                </Button>
+                                <p className="drop-line drop-signin"><hr /><spa>Bạn đã có tài khoản?<a className="drop-link" href="/login"> Đăng nhập</a></spa><hr /></p>
+                            </Form>
+                            <div className="error">{error && <p>{errorMsg}</p>}</div>
+                        </Card.Body>
+                    </Card>
+                </Container>
+            </div>
+
+            <Footer />
         </>
     )
 }

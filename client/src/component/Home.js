@@ -3,6 +3,7 @@ import NavBar from "./NavBar"
 import React, { useState, useEffect } from "react"
 
 import "../css/home.css"
+import "../css/search.css"
 import { Container } from "react-bootstrap"
 import { DiAngularSimple } from "react-icons/di";
 import { DiApple } from "react-icons/di";
@@ -45,32 +46,34 @@ export default function Home() {
                 <Container>
                     <div className="row">
                         <div className="col-3 search-area">
-                            <nav id="menu">
-                                <ul className="main-menu">
-                                    <li><a className="li-title" href="#">Blog học tập việt nam</a>
-                                        <ul>
-                                            <li><a className="li-item" href="#"><DiCloud9 />Toán</a></li>
-                                            <li><a className="li-item" href="#"><DiCoda />Lí</a></li>
-                                            <li><a className="li-item" href="#"><DiApple />Hóa</a></li>
-                                            <li><a className="li-item" href="#"><DiAngularSimple />Tiếng anh</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a className="li-title" href="#">Công thức rút gọn</a>
-                                        <ul>
-                                            <li><a className="li-item" href="#"><DiCloud9 />Toán</a></li>
-                                            <li><a className="li-item" href="#"><DiCoda />Lí</a></li>
-                                            <li><a className="li-item" href="#"><DiApple />Hóa</a></li>
-                                            <li><a className="li-item" href="#"><DiAngularSimple />Tiếng anh</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a className="li-title" href="#">Mục khác</a>
-                                        <ul>
-                                            <li><a className="li-item" href="#"><DiCloud9 />Toán</a></li>
-                                            <li><a className="li-item" href="#"><DiCoda />Lí</a></li>
-                                        </ul>
-                                    </li>
+                            <div className="list-area">
+                                <h3>Diễn đàn UI/UX Việt Nam</h3>
+                                <ul>
+                                    <li><a><AiFillHome />Home</a></li>
+                                    <li><a><AiFillHome />Thiết kế</a></li>
+                                    <li><a><AiFillHome />UI desgin</a></li>
+                                    <li><a><AiFillHome />Ux Design</a></li>
+                                    <li><a><AiFillHome />Danh sách đọc</a></li>
+                                    <li><a><AiFillHome />Quà tặng</a></li>
                                 </ul>
-                            </nav>
+                            </div>
+
+                            <div className="list-area">
+                                <h3>Môn học tự nhiên</h3>
+                                <ul>
+                                    <li><a><AiFillHome />Home</a></li>
+                                    <li><a><AiFillHome />Thiết kế</a></li>
+                                    <li><a><AiFillHome />UI desgin</a></li>
+                                </ul>
+                            </div>
+
+                            <div className="list-area">
+                                <h3>Công thức nhanh</h3>
+                                <ul>
+                                    <li><a><AiFillHome />Home</a></li>
+                                    <li><a><AiFillHome />Thiết kế</a></li>
+                                </ul>
+                            </div>
                         </div>
 
                         <div className="col-6 content-area">
@@ -101,7 +104,65 @@ export default function Home() {
                         </div>
 
                         <div className="col-3 more-area">
-                            more
+                            <div className="more-area-header"></div>
+                            <div className="more-area-tag">
+                                <div className="tag-header">#tagname</div>
+                                <div className="tag-content">
+                                    Bạn có biết công việc của UX Designer là gì? - Nguyễn Đức Lượng
+                                    <br />
+                                    <span className="tag-content-comment">3 comments</span>
+                                </div>
+                                <div className="tag-content">
+                                    Bạn có biết công việc của UX Designer là gì? - Nguyễn Đức Lượng
+                                    <br />
+                                    <span className="tag-content-comment">3 comments</span>
+                                </div>
+                                <div className="tag-content">
+                                    Bạn có biết công việc của UX Designer là gì? - Nguyễn Đức Lượng
+                                    <br />
+                                    <span className="tag-content-comment">3 comments</span>
+                                </div>
+                            </div>
+
+                            {/* tag1 */}
+                            <div className="more-area-tag">
+                                <div className="tag-header">#tagname</div>
+                                <div className="tag-content">
+                                    Bạn có biết công việc của UX Designer là gì? - Nguyễn Đức Lượng
+                                    <br />
+                                    <span className="tag-content-comment">3 comments</span>
+                                </div>
+                                <div className="tag-content">
+                                    Bạn có biết công việc của UX Designer là gì? - Nguyễn Đức Lượng
+                                    <br />
+                                    <span className="tag-content-comment">3 comments</span>
+                                </div>
+                                <div className="tag-content">
+                                    Bạn có biết công việc của UX Designer là gì? - Nguyễn Đức Lượng
+                                    <br />
+                                    <span className="tag-content-comment">3 comments</span>
+                                </div>
+                            </div>
+
+                            {/* tag2 */}
+                            <div className="more-area-tag">
+                                <div className="tag-header">#tagname</div>
+                                <div className="tag-content">
+                                    Bạn có biết công việc của UX Designer là gì? - Nguyễn Đức Lượng
+                                    <br />
+                                    <span className="tag-content-comment">3 comments</span>
+                                </div>
+                                <div className="tag-content">
+                                    Bạn có biết công việc của UX Designer là gì? - Nguyễn Đức Lượng
+                                    <br />
+                                    <span className="tag-content-comment">3 comments</span>
+                                </div>
+                                <div className="tag-content">
+                                    Bạn có biết công việc của UX Designer là gì? - Nguyễn Đức Lượng
+                                    <br />
+                                    <span className="tag-content-comment">3 comments</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </Container>

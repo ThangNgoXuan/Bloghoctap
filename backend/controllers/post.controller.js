@@ -24,9 +24,8 @@ const newPost = async (req, res) => {
                 "publishedAt": publishedAt,
                 "createdAt": Date.now(),
                 "author": author,
-                "like": like,
-                "comment": comment,
-
+                "likes": [],
+                "comment": [],
             }
         }, function (err, resp) {
 
@@ -99,4 +98,32 @@ const getPostBySlug = async (req, res) => {
     }
 }
 
-export { newPost, getAllPost, getPostBySlug }
+const searchPosts = async (req, res) => {
+    const { keyword } = req.params;
+
+    try {
+        const result = await client.search({
+            index: userIndex,
+            body: {
+                query: {
+                    multi_match: {
+                        query: keyword,
+                        fields: ['title', 'tags', 'content']
+                    }
+                }
+            },
+
+        });
+        if (result.body) {
+            const data = result.body.hits.hits;
+            res.send({ total: data.length, data });
+            return;
+        }
+    } catch (error) {
+        let err = error.name ? { error: error.name } : error
+        res.send(err);
+    }
+}
+
+
+export { newPost, getAllPost, getPostBySlug, searchPosts }

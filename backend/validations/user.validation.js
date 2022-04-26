@@ -56,7 +56,7 @@ const createUserPolicy = (req, res, next) => {
 
 const createUser = {
     body: Joi.object().keys({
-        username: Joi.string().required(),
+        // username: Joi.string().required(),
         email: Joi.string().required().email(),
         password: Joi.string().required(),
         name: Joi.string().required(),

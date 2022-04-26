@@ -92,7 +92,9 @@ export default function Home() {
                                                     <div className="author-title">
                                                         {post._source.title}
                                                         <br />
-                                                        <FcLike /><span>Reactions</span>
+                                                        <FcLike /><span>{post._source.likes.length}</span>
+
+                                                        <span className="hashtag">{post._source.tags.join('  ')}</span>
                                                     </div>
                                                 </div>
                                             </Link>

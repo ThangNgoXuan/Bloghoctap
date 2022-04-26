@@ -159,6 +159,11 @@
     font-weight: 700;
 }
 
+.hashtag {
+    margin-left: 18rem;  
+    font-size: 14px;
+}
+
 .blog-item a .blog-item-content .author-title svg{
     width: 24px;
     height: 24px;

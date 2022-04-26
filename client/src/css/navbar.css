@@ -46,12 +46,17 @@
 .navbar .container .navbar-collapse .user-icon{
     width: 32px;
     height: 32px;
-    background-color: #000;
+    background-color: #aaa;
     border: none;
     border-radius: 50%;
     transition: all 0.3s ease-in-out;
     margin-top: 3px;
+}
 
+.navbar .container .navbar-collapse .user-icon img{
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
 }
 
 .navbar .container .navbar-collapse .user-icon:hover{

@@ -12,44 +12,56 @@ import {
 import axios from "axios";
 import { FaSearch } from "react-icons/fa";
 import { BsBell } from "react-icons/bs";
-import avatar from "../image/avatar.jpg"
 import "../css/navbar.css";
+
+function isHashtag(hashtag) {
+  // Regular expression to check if string is a hashtag
+  const regexExp = /^#[^ !@#$%^&*(),.?":{}|<>]*$/gi;
+
+  return regexExp.test(hashtag); // true
+}
 
 export default function NavBar() {
   const navigate = useNavigate();
 
   const [loggedIn, setLoggedIn] = useState(false);
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [avatar, setAvatar] = useState("");
   const [query, setQuery] = useState("");
 
   useEffect(() => {
-    if (localStorage.getItem("token")) {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"))
+    if (userInfo) {
       setLoggedIn(true);
-      axios
-        .post(`${process.env.REACT_APP_BASE_URL}/api/user/data`, {
-          token: localStorage.getItem("token"),
-        })
-        .then((res) => {
-          setName(res.data.name);
-          setEmail(res.data.email);
-        })
-        .catch((err) => {
-          localStorage.removeItem("token");
-          setLoggedIn(false);
-        });
+      setName(userInfo.name)
+      // axios
+      //   .post(`${process.env.REACT_APP_BASE_URL}/api/user/data`, {
+      //     token: localStorage.getItem("token"),
+      //   })
+      //   .then((res) => {
+      //     setName(res.data.name);
+      //     setEmail(res.data.email);
+      //   })
+      //   .catch((err) => {
+      //     localStorage.removeItem("token");
+      //     setLoggedIn(false);
+      //   });
     }
   }, []);
 
   const logout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("userInfo");
     setLoggedIn(false);
     navigate("/");
   };
 
   const handleSearch = (e) => {
     e.preventDefault();
-    navigate(`/search/${query}`);
+    if (isHashtag(query)) {
+      navigate(`/hashtag/${query.slice(1)}`);
+    } else {
+      navigate(`/search/${query}`);
+    }
   };
 
   return (
@@ -89,7 +101,7 @@ export default function NavBar() {
               </Form>
             </Nav>
 
-             {loggedIn ? ( 
+            {loggedIn ? (
               <Nav>
                 <Nav.Link>
                   <Button
@@ -102,20 +114,20 @@ export default function NavBar() {
                     Tạo chủ đề
                   </Button>
                 </Nav.Link>
-                
+
                 <Nav.Link className="noti">
-                    <BsBell/>
+                  <BsBell />
                 </Nav.Link>
 
                 <NavDropdown
                   align={{ lg: "end" }}
                   title={
-                      <div className="user-icon">
-                        <image src={avatar} />
-                      </div>
-                  } 
-                > 
-                  <NavDropdown.Item>Thang Ngo</NavDropdown.Item>
+                    <div className="user-icon">
+                      <img src={avatar || 'https://www.iconpacks.net/icons/2/free-user-icon-3297-thumb.png'} />
+                    </div>
+                  }
+                >
+                  <NavDropdown.Item>{name}</NavDropdown.Item>
                   <NavDropdown.Divider />
                   <NavDropdown.Item
                     onClick={() => {
@@ -127,8 +139,8 @@ export default function NavBar() {
                   <NavDropdown.Item onClick={logout}>Đăng xuất</NavDropdown.Item>
                 </NavDropdown>
               </Nav>
-             ) : ( 
-               <Nav>
+            ) : (
+              <Nav>
                 <Nav.Link>
                   <Button
                     variant="success"
@@ -151,8 +163,8 @@ export default function NavBar() {
                     Signup
                   </Button>
                 </Nav.Link>
-              </Nav> 
-             )} 
+              </Nav>
+            )}
           </Navbar.Collapse>
         </Container>
       </Navbar>

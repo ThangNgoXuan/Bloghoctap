@@ -99,7 +99,13 @@ const getPostBySlug = async (req, res) => {
 }
 
 const searchPosts = async (req, res) => {
-    const { keyword } = req.params;
+    const { q, hashtag } = req.query;
+    let keyword = q;
+    console.log("req.query")
+    console.log(req.query)
+    if (hashtag) {
+        keyword = "#" + hashtag;
+    }
 
     try {
         const result = await client.search({

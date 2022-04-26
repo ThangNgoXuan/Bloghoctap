@@ -48,7 +48,7 @@ const registUser = async (req, res) => {
 
                         if (resp.body) {
                             // const result = resp.body.hits.hits;
-                            res.send({ success: "Create user success" });
+                            res.send({ success: "Đăng ký tài khoản thành công!" });
                             console.log(resp.body);
                             return;
                         } else if (err) {
@@ -90,6 +90,7 @@ const loginUser = async (req, res) => {
             }
         })
         const users = result.body.hits.hits;
+        console.log(users)
         if (users.length === 0) {
             res.status(400).send({ error: "Tài khoản không tồn tại" })
         } else {
@@ -105,9 +106,10 @@ const loginUser = async (req, res) => {
                 const user = {
                     name: users[0]._source.name,
                     id: users[0]._id,
+                    avatar: users[0]._source.avatar,
                     token: generateToken(users[0]._id),
                 }
-                res.status(200).send({ success: "Đăng nhập thành công", user });
+                res.status(200).send({ ...user });
                 return;
             });
 

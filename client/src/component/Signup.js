@@ -29,7 +29,7 @@ export default function Signup() {
     const [submitting, setSubmitting] = useState(false);
 
     useEffect(() => {
-        if (localStorage.getItem("token")) {
+        if (localStorage.getItem("userInfo")) {
             navigate("/");
         }
     }, [navigate]);
@@ -55,27 +55,26 @@ export default function Signup() {
             return;
         }
 
-        axios
-            .post(`${process.env.REACT_APP_BASE_URL}/api/auth/register`, {
-                name,
-                email,
-                password,
-            })
-            .then((res) => {
-                setSubmitting(false);
-                navigate("/login");
-            })
-            .catch((err) => {
-                setSubmitting(false);
-                setError(true);
-                setErrorMsg(err.response.data.error);
-                setTimeout(() => {
-                    setError(false);
-                    setErrorMsg("");
-                }, 3000);
-            });
+        // axios.post(`${process.env.REACT_APP_BASE_URL}/api/auth/register`, {
+        //     name,
+        //     email,
+        //     password,
+        // })
+        //     .then((res) => {
+        //         setSubmitting(false);
+        //         navigate("/login");
+        //     })
+        //     .catch((err) => {
+        //         setSubmitting(false);
+        //         setError(true);
+        //         setErrorMsg(err.response.data.error);
+        //         setTimeout(() => {
+        //             setError(false);
+        //             setErrorMsg("");
+        //         }, 3000);
+        //     });
 
-        setValidated(true);
+        // setValidated(true);
     };
     return (
         <>
@@ -106,7 +105,7 @@ export default function Signup() {
                                         required
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        Please provide name
+                                        Bạn chưa nhập tên!
                                     </Form.Control.Feedback>
                                 </Form.Group>
                                 <Form.Group className="mb-3">

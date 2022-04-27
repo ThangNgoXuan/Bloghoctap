@@ -99,7 +99,13 @@ const getPostBySlug = async (req, res) => {
 }
 
 const searchPosts = async (req, res) => {
-    const { keyword } = req.params;
+    const { q, hashtag } = req.query;
+    let keyword = q;
+    console.log("req.query")
+    console.log(req.query)
+    if (hashtag) {
+        keyword = "#" + hashtag;
+    }
 
     try {
         const result = await client.search({
@@ -125,5 +131,33 @@ const searchPosts = async (req, res) => {
     }
 }
 
+const getPostByUser = async (req, res) => {
+    const { userId } = req.params;
+    console.log(userId)
 
-export { newPost, getAllPost, getPostBySlug, searchPosts }
+    try {
+        const result = await client.search({
+            index: userIndex,
+            body: {
+                query: {
+                    match: {
+                        author: userId
+                    }
+                }
+            },
+
+        });
+        if (result.body) {
+            console.log(result)
+            const data = result.body.hits.hits;
+            res.send({ total: data.length, data });
+            return;
+        }
+    } catch (error) {
+        let err = error.name ? { error: error.name } : error
+        res.send(err);
+    }
+}
+
+
+export { newPost, getAllPost, getPostBySlug, searchPosts, getPostByUser }

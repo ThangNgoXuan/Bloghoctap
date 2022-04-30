@@ -119,6 +119,13 @@ export default function CreatePost() {
                                 placeholder="New post title here ..."
                             />
                         </Form.Group>
+                        <Form.Group>
+                            <Form.Control
+                                className="add-tagname"
+                                type="text"
+                                placeholder="Add up to 4 tags..."
+                            />
+                        </Form.Group>     
                         <CKEditor
                             editor={ClassicEditor}
                         />

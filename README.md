@@ -4,10 +4,10 @@
 ### 1.Thông tin đồ án:
 ```php
 - Đồ án cuối kì đề tài 2: Xây dựng blog học tập ứng dụng ElasticSearch
-- GVHD: T. Huỳnh Xuân Phụng
+- GVHD: TS. Huỳnh Xuân Phụng
 - Sinh viên thực hiên:
  * Ngô Xuân Thắng - 18110368
- * Nguyễn Ngọc Trung Hiếu - 1811
+ * Nguyễn Ngọc Trung Hiếu - 18110283
  * Nguyễn Văn Từ - 18110
 ```
 ### 2.Công nghệ sử dụng:

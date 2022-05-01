@@ -1,20 +1,17 @@
-import Footer from "./Footer"
-import NavBar from "./NavBar"
-import React, { useState, useEffect } from "react"
-
-import "../css/home.css"
-import "../css/search.css"
-import { Container } from "react-bootstrap"
-import { DiAngularSimple } from "react-icons/di";
-import { DiApple } from "react-icons/di";
-import { DiCoda } from "react-icons/di";
-import { DiCloud9 } from "react-icons/di";
-import imgtitle from "../image/image.png"
-import avatar from "../image/avatar.jpg"
-import { FcLike } from "react-icons/fc"
-import { AiFillHome } from "react-icons/ai"
 import Axios from 'axios';
 import { Link } from "react-router-dom"
+import React, { useState, useEffect } from "react"
+import { Container } from "react-bootstrap"
+import { DiAngularSimple, DiApple, DiCoda, DiCloud9 } from "react-icons/di";
+import { AiFillHome, AiFillLike } from "react-icons/ai"
+import {FaComments} from 'react-icons/fa'
+import Footer from "./Footer"
+import NavBar from "./NavBar"
+import imgtitle from "../image/image.png"
+import avatar from "../image/avatar.jpg"
+import "../css/home.css"
+import "../css/search.css"
+
 
 export default function Home() {
     const [posts, setPosts] = useState([]);
@@ -56,12 +53,22 @@ export default function Home() {
                                                 <div className="blog-item-content">
                                                     <div className="author">
                                                         <img src={avatar} />
-                                                        Thắng Ngô
+                                                        <div className='qq'> 
+                                                            <span> Thắng Ngô</span>
+                                                            <span className='day-post'>May 1</span>
+                                                        </div>
                                                     </div>
+                                                    
                                                     <div className="author-title">
+                                                        <div className='tag-post'>
+                                                            <span>#figma</span>
+                                                            <span>#figma</span>
+                                                            <span>#figma</span>
+                                                        </div>
                                                         {post._source.title}
                                                         <br />
-                                                        <FcLike /><span>Reactions</span>
+                                                        <AiFillLike /><span>5 Reactions</span>
+                                                        <FaComments /><span>20 Comments</span>
                                                     </div>
                                                 </div>
                                             </Link>

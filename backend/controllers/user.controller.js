@@ -90,7 +90,8 @@ const loginUser = async (req, res) => {
             }
         })
         const users = result.body.hits.hits;
-        console.log(users)
+        console.log( result)
+        console.log(email)
         if (users.length === 0) {
             res.status(400).send({ error: "Tài khoản không tồn tại" })
         } else {
@@ -143,6 +144,7 @@ const getAll = async (req, res) => {
     } catch (error) {
         let err = error.name ? { error: error.name } : error
         res.send(err);
+        console.log(error)
     }
 }
 

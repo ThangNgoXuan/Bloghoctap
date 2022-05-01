@@ -4,13 +4,10 @@ import Footer from "./Footer"
 import { Container } from "react-bootstrap"
 import "../css/profile.css"
 import imgtitle from "../image/image.png"
-import { AiFillLike } from "react-icons/ai"
+import { AiFillLike,AiFillMail } from "react-icons/ai"
 import { Button } from "react-bootstrap"
-import { FaPeriscope } from "react-icons/fa";
-import { FaBirthdayCake } from "react-icons/fa";
-import { AiFillMail } from "react-icons/ai";
+import { FaPeriscope, FaBirthdayCake, FaComments } from "react-icons/fa";
 import { BsFillFileEarmarkPostFill } from "react-icons/bs";
-import { FaComments } from "react-icons/fa";
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
 

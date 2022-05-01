@@ -9,8 +9,8 @@ import {
 } from "react-bootstrap"
 import NavBar from "./NavBar"
 import Footer from "./Footer"
-import { FcLike } from "react-icons/fc"
-import { FaRegComment } from "react-icons/fa"
+import { AiFillLike } from "react-icons/ai"
+import { FaComments } from "react-icons/fa"
 import { BsFillBookmarkFill } from "react-icons/bs"
 import { MdMoreHoriz } from "react-icons/md"
 import imgtitle from "../image/image.png"
@@ -51,11 +51,11 @@ export default function Blog() {
                         <div className="col col-md-1 not1">
                             <div className="utilities">
                                 <div className="utility-item like">
-                                    <FcLike />
+                                    <AiFillLike />
                                     <p className="total">0</p>
                                 </div>
                                 <div className="utility-item comment">
-                                    <FaRegComment />
+                                    <FaComments />
                                     <p className="total">0</p>
                                 </div>
                                 <div className="utility-item save">

@@ -21,7 +21,8 @@ function App() {
         <Route exact path="/editpost" element={<EditPost />} />
         <Route exact path="/profile" element={<Profile />} />
         <Route exact path="/blog/:slug" element={<Blog />} />
-        <Route exact path="/search" element={<Search />} />
+        <Route exact path="/search/:query" element={<Search />} />
+        <Route exact path="/hashtag/:query" element={<Search />} />
       </Routes>
     </BrowserRouter>
   );

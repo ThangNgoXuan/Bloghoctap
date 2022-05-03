@@ -47,38 +47,7 @@ export default function Home() {
             <NavBar />
             <div className="home-container ">
                 <Container>
-                    <div className="row">
-                        <div className="col-3 search-area">
-                            <div className="list-area">
-                                <h3>Diễn đàn UI/UX Việt Nam</h3>
-                                <ul>
-                                    <li><a><AiFillHome />Home</a></li>
-                                    <li><a><AiFillHome />Thiết kế</a></li>
-                                    <li><a><AiFillHome />UI desgin</a></li>
-                                    <li><a><AiFillHome />Ux Design</a></li>
-                                    <li><a><AiFillHome />Danh sách đọc</a></li>
-                                    <li><a><AiFillHome />Quà tặng</a></li>
-                                </ul>
-                            </div>
-
-                            <div className="list-area">
-                                <h3>Môn học tự nhiên</h3>
-                                <ul>
-                                    <li><a><AiFillHome />Home</a></li>
-                                    <li><a><AiFillHome />Thiết kế</a></li>
-                                    <li><a><AiFillHome />UI desgin</a></li>
-                                </ul>
-                            </div>
-
-                            <div className="list-area">
-                                <h3>Công thức nhanh</h3>
-                                <ul>
-                                    <li><a><AiFillHome />Home</a></li>
-                                    <li><a><AiFillHome />Thiết kế</a></li>
-                                </ul>
-                            </div>
-                        </div>
-
+                    <div className="row justify-content-md-center">
                         <div className="col-6 content-area">
                             <h1> Bài viết</h1>
                             {

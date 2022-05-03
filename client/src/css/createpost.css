@@ -106,9 +106,10 @@
     box-shadow: none;
     resize: none;
     color: #08090a;
-    margin: 0 0 2rem 0;
+    margin: 0 0 1.5rem 0;
     padding: 0;
 }
+
 
 .createpost-container .container .card form input[type="text"]:focus{
     outline: none;
@@ -124,6 +125,20 @@
 .createpost-container .container .card form .ck-editor__editable {
     min-height: 25vh;
 }
+
+.createpost-container .container .card form input[type="text"].addtagname {
+    font-size: 1rem;
+    color: red;
+    margin: 0 0 0.5rem 0;
+}
+
+.createpost-container .container .card form input[type="text"].addtagname::placeholder {
+    font-size: 1rem;
+    color: #64707d;
+    font-weight: 500;
+}
+
+
 
 .createpost-container .container .card form .submit{
     width:9rem;

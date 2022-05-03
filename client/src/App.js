@@ -17,13 +17,13 @@ function App() {
         <Route exact path="/login" element={<Login />} />
         <Route exact path="/signup" element={<Signup />} />
         <Route exact path="/createpost" element={<CreatePost />} />
+        <Route exact path="/edipost" element={<EditPost />} />
         <Route exact path="/editpost" element={<EditPost />} />
         <Route exact path="/profile" element={<Profile />} />
         <Route exact path="/blog/:slug" element={<Blog />} />
         <Route exact path="/search/:query" element={<Search />} />
         <Route exact path="/hashtag/:query" element={<Search />} />
       </Routes>
-
     </BrowserRouter>
   );
 }

@@ -48,7 +48,7 @@ const registUser = async (req, res) => {
 
                         if (resp.body) {
                             // const result = resp.body.hits.hits;
-                            res.send({ success: "Create user success" });
+                            res.send({ success: "Đăng ký tài khoản thành công!" });
                             console.log(resp.body);
                             return;
                         } else if (err) {
@@ -90,6 +90,7 @@ const loginUser = async (req, res) => {
             }
         })
         const users = result.body.hits.hits;
+        console.log(users)
         if (users.length === 0) {
             res.status(400).send({ error: "Tài khoản không tồn tại" })
         } else {
@@ -105,9 +106,10 @@ const loginUser = async (req, res) => {
                 const user = {
                     name: users[0]._source.name,
                     id: users[0]._id,
+                    avatar: users[0]._source.avatar,
                     token: generateToken(users[0]._id),
                 }
-                res.status(200).send({ success: "Đăng nhập thành công", user });
+                res.status(200).send({ ...user });
                 return;
             });
 
@@ -144,4 +146,65 @@ const getAll = async (req, res) => {
     }
 }
 
-export { registUser, loginUser, getAll }
+const getUserProfile = async (req, res) => {
+
+    const { _id } = req.body;
+
+    const user = await client.search({
+        index: userIndex,
+        body: {
+            query: {
+                match: {
+                    _id: _id
+                }
+            }
+        }
+    });
+
+    if (user && user.body.hits.total.value >= 1) {
+        const data = user.body.hits.hits[0];
+        const userProfile = {
+            _id: data._id,
+            name: data._source.name,
+            email: data._source.email,
+            avatar: data._source.avatar,
+        }
+        res.status(200).send(userProfile);
+    } else {
+        res.status(401).send({ error: "Không tìm thấy user" })
+    }
+}
+
+const searchUser = async (req, res) => {
+    const query = req.query.query;
+    //  console.log(query)
+    if (query) {
+        try {
+
+            const result = await client.search({
+                index: userIndex,
+                body: {
+                    query: {
+                        multi_match: {
+                            fields: ['name', 'email'],
+                            query: query,
+                            // type: 'phrase_prefix',
+                        }
+                    },
+
+                }
+            });
+            if (result) {
+                const data = result.body.hits.hits;
+                res.status(200).send(data);
+            }
+        } catch (error) {
+            console.log(error)
+            let err = error.name ? { error: error.name } : error
+            res.send(err);
+        }
+    }
+
+}
+
+export { registUser, loginUser, getAll, getUserProfile, searchUser }

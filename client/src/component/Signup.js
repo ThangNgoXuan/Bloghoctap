@@ -45,7 +45,7 @@ export default function Signup() {
 
         if (password !== confirmPassword) {
             setError(true);
-            setErrorMsg("Passwords do not match");
+            setErrorMsg("Mật khẩu không khớp");
             setTimeout(() => {
                 setError(false);
                 setErrorMsg("");
@@ -55,26 +55,26 @@ export default function Signup() {
             return;
         }
 
-        // axios.post(`${process.env.REACT_APP_BASE_URL}/api/auth/register`, {
-        //     name,
-        //     email,
-        //     password,
-        // })
-        //     .then((res) => {
-        //         setSubmitting(false);
-        //         navigate("/login");
-        //     })
-        //     .catch((err) => {
-        //         setSubmitting(false);
-        //         setError(true);
-        //         setErrorMsg(err.response.data.error);
-        //         setTimeout(() => {
-        //             setError(false);
-        //             setErrorMsg("");
-        //         }, 3000);
-        //     });
+        axios.post(`${process.env.REACT_APP_BASE_URL}/api/user`, {
+            name,
+            email,
+            password,
+        })
+            .then((res) => {
+                setSubmitting(false);
+                navigate("/login");
+            })
+            .catch((err) => {
+                setSubmitting(false);
+                setError(true);
+                setErrorMsg(err.response.data.error);
+                setTimeout(() => {
+                    setError(false);
+                    setErrorMsg("");
+                }, 3000);
+            });
 
-        // setValidated(true);
+        setValidated(true);
     };
     return (
         <>
@@ -95,6 +95,7 @@ export default function Signup() {
                             </Button>
                             <br />
                             <p className="drop-line"> <hr /> Hoặc <hr /> </p>
+                            <div className="error">{error && <p>{errorMsg}</p>}</div>
                             <Form noValidate validated={validated} onSubmit={handleSubmit}>
                                 <Form.Group className="mb-3">
                                     <Form.Label>Tên</Form.Label>
@@ -129,7 +130,7 @@ export default function Signup() {
                                         required
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        Please enter password
+                                        Hãy nhập mật khẩu của bạn
                                     </Form.Control.Feedback>
                                 </Form.Group>
                                 <Form.Group className="mb-3">
@@ -141,7 +142,7 @@ export default function Signup() {
                                         required
                                     />
                                     <Form.Control.Feedback type="invalid">
-                                        Please confirm password
+                                        NHập lại mật khẩu
                                     </Form.Control.Feedback>
                                 </Form.Group>
 
@@ -158,7 +159,6 @@ export default function Signup() {
                                 </Button>
                                 <p className="drop-line drop-signin"><hr /><spa>Bạn đã có tài khoản?<a className="drop-link" href="/login"> Đăng nhập</a></spa><hr /></p>
                             </Form>
-                            <div className="error">{error && <p>{errorMsg}</p>}</div>
                         </Card.Body>
                     </Card>
                 </Container>

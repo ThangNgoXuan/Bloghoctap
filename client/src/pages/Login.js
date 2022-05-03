@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
-import NavBar from "./NavBar"
-import Footer from "./Footer"
+import NavBar from "../component/NavBar"
+import Footer from "../component/Footer"
 import {
   Container,
   Card,

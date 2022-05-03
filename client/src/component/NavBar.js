@@ -108,7 +108,7 @@ export default function NavBar() {
                     variant="success"
                     className="new-post"
                     onClick={() => {
-                      navigate("/new");
+                      navigate("/createpost");
                     }}
                   >
                     Tạo chủ đề

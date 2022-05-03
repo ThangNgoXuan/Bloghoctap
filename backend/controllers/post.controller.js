@@ -1,42 +1,71 @@
 import uniqid from 'uniqid';
 import client from '../connection.js';
 import slugify from 'slugify';
+import { v2 as cloudinary } from 'cloudinary'
 
 const userIndex = 'posts';
 
+const { CLOUD_NAME, API_KEY, API_SECRET } = process.env;
+cloudinary.config({
+    cloud_name: CLOUD_NAME,
+    api_key: API_KEY,
+    api_secret: API_SECRET,
+});
+
+
 const newPost = async (req, res) => {
-    const { author, tags, isPublish = true, title, coverImg, content, like = 0, comment = [] } = req.body
+    const { tags, isPublish = true, title, content, authorName, date } = req.body
     let publishedAt = "";
-    if (isPublish) publishedAt = Date.now()
+    if (isPublish) publishedAt = new Date();
+    let coverImg = "";
+    let cloudinaryId = ""
+    // console.log(req.body)
+    if (req.file) {
+        await cloudinary.uploader.upload(
+            req.file.path,
+            { folder: "blog" },
+            (err, result) => {
+                if (err) {
+                    res.status(500).json({
+                        error: "Internal server error",
+                    });
+                }
+                coverImg = result.secure_url;
+                console.log(coverImg)
+                cloudinaryId = result.public_id;
+            }
+        );
+    }
+
+    const newPost = {
+        id: "p-" + uniqid(),
+        title: title,
+        slug: slugify(title),
+        tags: tags.split(",") || [],
+        coverImg: coverImg,
+        content: content,
+        isPublish: isPublish,
+        publishedAt: publishedAt,
+        createdAt: date || new Date(),
+        authorId: req.user.id,
+        authorName: req.user.name,
+        likes: [],
+        cloudinaryId: cloudinaryId,
+    }
 
     try {
-        let err;
+        // let err;
         client.index({
             index: userIndex,
-            body: {
-                "id": "p-" + uniqid(),
-                "title": title,
-                "slug": slugify(title),
-                "tags": tags || [],
-                "coverImg": coverImg || "https://www.browsewire.net/wp-content/uploads/2017/11/blog-img.jpg",
-                "content": content,
-                "isPublish": isPublish,
-                "publishedAt": publishedAt,
-                "createdAt": Date.now(),
-                "author": author,
-                "likes": [],
-                "comment": [],
-            }
+            body: newPost
         }, function (err, resp) {
-
             if (resp.body) {
-
-                res.send(resp)
-                // res.send({ success: "Add blog success!" })
+                console.log(resp.body)
+                res.send({ success: "Add blog success!" })
                 return;
             } else if (err) {
-                err = err;
-                res.status(404).send({ error: err.name });
+                console.log(err)
+                res.status(404).send({ error: err });
                 return;
             }
         });
@@ -148,7 +177,7 @@ const getPostByUser = async (req, res) => {
 
         });
         if (result.body) {
-            console.log(result)
+            // console.log(result)
             const data = result.body.hits.hits;
             res.send({ total: data.length, data });
             return;

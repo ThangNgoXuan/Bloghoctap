@@ -1,20 +1,14 @@
-import Footer from "./Footer"
-import NavBar from "./NavBar"
+import Axios from 'axios';
+import Footer from "../component/Footer"
+import NavBar from "../component/NavBar"
 import React, { useState, useEffect } from "react"
-
 import "../css/home.css"
 import "../css/search.css"
 import { Container } from "react-bootstrap"
-import { DiAngularSimple } from "react-icons/di";
-import { DiApple } from "react-icons/di";
-import { DiCoda } from "react-icons/di";
-import { DiCloud9 } from "react-icons/di";
-import imgtitle from "../image/image.png"
 import avatar from "../image/avatar.jpg"
 import { FcLike } from "react-icons/fc"
-import { AiFillHome } from "react-icons/ai"
-import Axios from 'axios';
 import { Link } from "react-router-dom"
+import { FaComments } from "react-icons/fa"
 
 export default function Home() {
     const [posts, setPosts] = useState([]);
@@ -40,7 +34,7 @@ export default function Home() {
     console.log(posts)
 
 
-    
+
 
     return (
         <>
@@ -59,14 +53,27 @@ export default function Home() {
                                                 <div className="blog-item-content">
                                                     <div className="author">
                                                         <img src={avatar} />
-                                                        Thắng Ngô
+                                                        <div className='qq'>
+                                                            <span>{post._source.authorName}</span>
+                                                            <span className='day-post'>
+                                                                {new Date(post._source.createdAt).toDateString()}
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                     <div className="author-title">
+                                                        <div className='tag-post'>
+                                                            {
+                                                                post._source.tags.map((item, i) =>
+                                                                    <span>{item}</span>
+                                                                )
+                                                            }
+
+                                                        </div>
                                                         {post._source.title}
                                                         <br />
                                                         <FcLike /><span>{post._source.likes.length}</span>
-
-                                                        <span className="hashtag">{post._source.tags.join('  ')}</span>
+                                                        {/* <AiFillLike /><span>5 Reactions</span> */}
+                                                        <FaComments /><span>Comments</span>
                                                     </div>
                                                 </div>
                                             </Link>

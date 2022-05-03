@@ -1,14 +1,8 @@
 import react, { useEffect, useState } from "react"
-import NavBar from "./NavBar"
-import Footer from "./Footer"
-import { Container } from "react-bootstrap"
+import NavBar from "../component/NavBar"
+import Footer from "../component/Footer"
 import "../css/profile.css"
-import imgtitle from "../image/image.png"
-import { AiFillLike } from "react-icons/ai"
-import { Button } from "react-bootstrap"
-import { FaPeriscope } from "react-icons/fa";
-import { FaBirthdayCake } from "react-icons/fa";
-import { AiFillMail } from "react-icons/ai";
+import { AiFillLike, AiFillMail } from "react-icons/ai"
 import { BsFillFileEarmarkPostFill } from "react-icons/bs";
 import { FaComments } from "react-icons/fa";
 import { useNavigate } from "react-router-dom"

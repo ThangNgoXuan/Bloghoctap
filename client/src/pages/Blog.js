@@ -4,13 +4,14 @@ import {
     Container,
     Row,
     Col,
-    Button
+    Button,
+    Card
 
 } from "react-bootstrap"
-import NavBar from "./NavBar"
-import Footer from "./Footer"
-import { FcLike } from "react-icons/fc"
-import { FaRegComment } from "react-icons/fa"
+import NavBar from "../component/NavBar"
+import Footer from "../component/Footer"
+import { AiFillLike } from "react-icons/ai"
+import { FaComments } from "react-icons/fa"
 import { BsFillBookmarkFill } from "react-icons/bs"
 import { MdMoreHoriz } from "react-icons/md"
 import imgtitle from "../image/image.png"
@@ -22,7 +23,7 @@ export default function Blog() {
     const [post, setPost] = useState({});
 
     let { slug } = useParams()
-    console.log(slug)
+    console.log(post)
 
     useEffect(() => {
         async function getPost() {
@@ -51,15 +52,11 @@ export default function Blog() {
                         <div className="col col-md-1 not1">
                             <div className="utilities">
                                 <div className="utility-item like">
-                                    <FcLike />
-                                    <p className="total">0</p>
+                                    <AiFillLike />
+                                    <p className="total">{post.likes}</p>
                                 </div>
                                 <div className="utility-item comment">
-                                    <FaRegComment />
-                                    <p className="total">0</p>
-                                </div>
-                                <div className="utility-item save">
-                                    <BsFillBookmarkFill />
+                                    <FaComments />
                                     <p className="total">0</p>
                                 </div>
                                 <div className="utility-item more">
@@ -69,7 +66,7 @@ export default function Blog() {
                         </div>
                         <div className="col col-md-8 not2">
                             <div className="blog">
-                                <div className="blog-image">
+                                {/* <div className="blog-image">
                                     <img src={post.coverImg} />
                                 </div>
                                 <div className="blog-content">
@@ -80,6 +77,22 @@ export default function Blog() {
                                         {post.content}
                                     </p>
                                 </div>
+                                 */}
+                                <Card>
+                                    <Card.Img src={post.coverImg} />
+                                    <Card.Body>
+                                        <div>
+                                            {post.authorName}
+                                            <br />
+                                            {new Date(post.createdAt).toDateString()}
+                                        </div>
+                                        <h1>{post.title}</h1>
+                                        <div
+                                            className="blog-content"
+                                            dangerouslySetInnerHTML={{ __html: post.content }}
+                                        ></div>
+                                    </Card.Body>
+                                </Card>
                                 <div className="blog-comment">
 
                                     <h1>Discussion</h1>
@@ -122,11 +135,11 @@ export default function Blog() {
                         </div>
                         <div className="col col-md-3 not3">
                             <div className="follow-container">
-                                <div className="header-black"></div>
+                                {/* <div className="header-black"></div> */}
                                 <div className="following">
                                     <div className="name">
-                                        <img src={avatar} />
-                                        Thắng Ngô
+                                        {/* <img src={avatar} /> */}
+                                        {post.authorName}
                                     </div>
                                     <Button>Following</Button>
                                 </div>

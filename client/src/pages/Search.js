@@ -1,6 +1,6 @@
 import react, { useEffect, useState } from "react"
-import NavBar from "./NavBar"
-import Footer from "./Footer"
+import NavBar from "../component/NavBar"
+import Footer from "../component/Footer"
 import {
     Container,
     Col,
@@ -8,7 +8,6 @@ import {
 } from "react-bootstrap"
 import "../css/search.css"
 import { FcLike } from "react-icons/fc"
-import imgtitle from "../image/image.png"
 import avatar from "../image/avatar.jpg"
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom"
 import axios from "axios"

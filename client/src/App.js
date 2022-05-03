@@ -1,11 +1,12 @@
-import Home from "./component/Home";
-import Login from "./component/Login";
-import Signup from "./component/Signup";
-import Profile from "./component/Profile";
-import CreatePost from "./component/CreatePorst";
-import EditPost from "./component/EditPost";
-import Blog from "./component/Blog";
-import Search from "./component/Search";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Profile from "./pages/Profile";
+import CreatePost from "./pages/CreatePost";
+import EditPost from "./pages/EditPost";
+import Blog from "./pages/Blog";
+import Search from "./pages/Search";
+import PrivateRoute from "./component/PrivateRoute";
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import React from "react";
 
@@ -16,8 +17,7 @@ function App() {
         <Route exact path="/" element={<Home />} />
         <Route exact path="/login" element={<Login />} />
         <Route exact path="/signup" element={<Signup />} />
-        <Route exact path="/createpost" element={<CreatePost />} />
-        <Route exact path="/edipost" element={<EditPost />} />
+        <Route exact path="/createpost" element={<PrivateRoute><CreatePost /></PrivateRoute>} />
         <Route exact path="/editpost" element={<EditPost />} />
         <Route exact path="/profile" element={<Profile />} />
         <Route exact path="/blog/:slug" element={<Blog />} />

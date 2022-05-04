@@ -5,8 +5,9 @@ import "../css/profile.css"
 import { AiFillLike, AiFillMail } from "react-icons/ai"
 import { BsFillFileEarmarkPostFill } from "react-icons/bs";
 import { FaComments } from "react-icons/fa";
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import axios from "axios"
+import { FcLike } from "react-icons/fc"
 
 export default function Profile() {
     const navigate = useNavigate();
@@ -18,7 +19,6 @@ export default function Profile() {
     const [likedBlogs, setLikedBlogs] = useState([]);
     const [isBlog, setIsBlog] = useState(true);
     const [loading, setLoading] = useState(true);
-
     useEffect(() => {
         const userInfo = JSON.parse(localStorage.getItem("userInfo"));
         if (userInfo) {
@@ -44,13 +44,32 @@ export default function Profile() {
                     // }, 1000);
                     navigate("/login");
                 });
+
+            getPostList();
         } else {
             setInterval(() => {
                 setLoading(false);
             }, 1000);
             navigate("/login");
         }
-    }, [navigate, setName, setEmail, setBlogs, setLikedBlogs]);
+    }, [navigate, setName, setEmail, setBlogs]);
+
+    async function getPostList() {
+        try {
+            axios.post("http://localhost:5000/api/post/mypost",
+                { token: JSON.parse(localStorage.getItem("userInfo")).token }
+            ).then(result => {
+
+                if (result.data.data && result.data.total >= 1) {
+                    setBlogs(result.data.data)
+                }
+            })
+
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
 
     return (
         <>
@@ -77,62 +96,48 @@ export default function Profile() {
                                     <ul>
                                         <li><AiFillLike />10 Likes</li>
                                         <li><FaComments />20 Commets</li>
-                                        <li><BsFillFileEarmarkPostFill />5 Posts</li>
+                                        <li><BsFillFileEarmarkPostFill />{blogs.length} Posts</li>
                                     </ul>
                                 </div>
                             </div>
                             <div className="col-8 ww">
-                                <div className="blog-item">
-                                    <a href="/blog">
-                                        <div className="blog-item-content">
-                                            <div className="author">
-                                                <img src={avatar} />
-                                                Thắng Ngô
-                                            </div>
-                                            <div className="author-title">
-                                                Danh sách các Framework để tạo ra các ý tưởng khi làm Product
-                                                <br />
-                                                <AiFillLike /><span>Reactions</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
+                                {
+                                    blogs.map((post) => {
+                                        return (
+                                            <div key={post._id} className="blog-item">
+                                                <Link to={`/blog/${post._source.slug}`}>
+                                                    <img src={post._source.coverImg} />
+                                                    <div className="blog-item-content">
+                                                        <div className="author">
+                                                            <img src={avatar} />
+                                                            <div className='qq'>
+                                                                <span>{post._source.authorName}</span>
+                                                                <span className='day-post'>
+                                                                    {new Date(post._source.createdAt).toDateString()}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="author-title">
+                                                            <div className='tag-post'>
+                                                                {
+                                                                    post._source.tags.map((item, i) =>
+                                                                        <span>{item}</span>
+                                                                    )
+                                                                }
 
-                                {/* 1 */}
-
-                                <div className="blog-item">
-                                    <a href="/blog">
-                                        <div className="blog-item-content">
-                                            <div className="author">
-                                                <img src={avatar} />
-                                                Thắng Ngô
+                                                            </div>
+                                                            {post._source.title}
+                                                            <br />
+                                                            <FcLike /><span>{post._source.likes.length}</span>
+                                                            {/* <AiFillLike /><span>5 Reactions</span> */}
+                                                            <FaComments /><span>Comments</span>
+                                                        </div>
+                                                    </div>
+                                                </Link>
                                             </div>
-                                            <div className="author-title">
-                                                Danh sách các Framework để tạo ra các ý tưởng khi làm Product
-                                                <br />
-                                                <AiFillLike /><span>Reactions</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-
-                                {/* 2 */}
-
-                                <div className="blog-item">
-                                    <a href="/blog">
-                                        <div className="blog-item-content">
-                                            <div className="author">
-                                                <img src={avatar} />
-                                                Thắng Ngô
-                                            </div>
-                                            <div className="author-title">
-                                                Danh sách các Framework để tạo ra các ý tưởng khi làm Product
-                                                <br />
-                                                <AiFillLike /><span>Reactions</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
+                                        )
+                                    })
+                                }
                             </div>
                         </div>
                     </div>

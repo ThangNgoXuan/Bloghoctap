@@ -3,7 +3,7 @@ const commentRouter = express.Router();
 import { isAuth } from '../middleware/auth.middleware.js';
 import { getCommentByPost, newComment } from '../controllers/comment.controller.js'
 
-commentRouter.get('/', getCommentByPost);
+commentRouter.get('/:postId', getCommentByPost);
 commentRouter.post('/', isAuth, newComment);
 
 export default commentRouter;

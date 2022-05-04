@@ -13,7 +13,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-postRouter.route('/author/:userId').get(getPostByUser);
+postRouter.route('/mypost').post(isAuth, getPostByUser);
 postRouter.route('/search').get(searchPosts);
 postRouter.route('/:slug').get(getPostBySlug);
 

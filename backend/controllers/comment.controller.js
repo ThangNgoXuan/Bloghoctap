@@ -3,24 +3,25 @@ import client from '../connection.js';
 const Index = 'comments';
 
 const newComment = async (req, res) => {
-    const { authorId, postId, createdAt = new Date(), content, reply = [], authorName, like = [] } = req.body
+    const { postId, createdAt = new Date(), content, parentId, like = [] } = req.body
 
     try {
         // let err;
         client.index({
             index: Index,
             body: {
-                authorId,
+                authorId: req.user.id,
                 postId,
                 createdAt,
                 content,
-                reply,
-                authorName,
+                parentId,
+                authorName: req.user.name,
                 like
             }
-        }, function (err, resp) {
+        }, async function (err, resp) {
             if (resp.body) {
-                console.log(resp.body)
+                // console.log(resp.body)
+                await client.indices.refresh({ index: 'comments' });
                 res.send({ success: "Add comment success!" })
                 return;
             } else if (err) {
@@ -38,10 +39,10 @@ const newComment = async (req, res) => {
 const getCommentByPost = async (req, res) => {
     // const { from = 0, size = 10 } = req.query;
     const { postId } = req.params;
-
+    console.log(postId)
     try {
         const result = await client.search({
-            index: userIndex,
+            index: Index,
             // from: from,
             // size: size,
             body: {

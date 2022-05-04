@@ -2,29 +2,30 @@ import React, { useState, useEffect } from "react"
 import "../css/blog.css"
 import {
     Container,
-    Row,
-    Col,
     Button,
-    Card
-
+    Card,
+    Spinner
 } from "react-bootstrap"
 import NavBar from "../component/NavBar"
 import Footer from "../component/Footer"
 import { AiFillLike } from "react-icons/ai"
 import { FaComments } from "react-icons/fa"
-import { BsFillBookmarkFill } from "react-icons/bs"
 import { MdMoreHoriz } from "react-icons/md"
-import imgtitle from "../image/image.png"
 import avatar from "../image/avatar.jpg"
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Axios from 'axios'
 
 export default function Blog() {
     const [post, setPost] = useState({});
+    const [submitting, setSubmitting] = useState(false);
+    const [comment, setComment] = useState("");
+    const [comments, setComments] = useState([]);
+    const [postId, setPostId] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+    const [error, setError] = useState(false);
+    const navigate = useNavigate()
 
     let { slug } = useParams()
-    console.log(post)
-
     useEffect(() => {
         async function getPost() {
             try {
@@ -32,6 +33,9 @@ export default function Blog() {
                     // console.log(result.data)
                     if (result.data.data && result.data.total >= 1) {
                         setPost(result.data.data[0]._source)
+                        setPostId(result.data.data[0]._id);
+                        getComment(result.data.data[0]._id);
+                        // console.log(result.data.data[0])
                     }
                 })
 
@@ -41,7 +45,46 @@ export default function Blog() {
 
         }
         getPost();
+
     }, [])
+    async function getComment(postId) {
+
+        try {
+            await Axios.get(`http://localhost:5000/api/comment/${postId}`).then(result => {
+                if (result.data.data) {
+                    console.log(result.data.data)
+                    setComments(result.data.data)
+                }
+            })
+
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+    const handleComment = () => {
+        if (comment) {
+            setSubmitting(true);
+            Axios.post("http://localhost:5000/api/comment",
+                {
+                    content: comment,
+                    postId: postId,
+                    token: JSON.parse(localStorage.getItem("userInfo")).token
+                }
+            )
+                .then((res) => {
+                    setSubmitting(false);
+                    getComment(postId)
+                })
+                .catch((err) => {
+                    setSubmitting(false);
+                    setError(true);
+                    setErrorMessage(err.response.data.error);
+                    navigate("/login");
+                });
+        }
+
+    };
 
     return (
         <>
@@ -104,24 +147,39 @@ export default function Blog() {
                                             <textarea
                                                 type="text"
                                                 placeholder="Add to the discussion"
+                                                onChange={(e) => setComment(e.target.value)}
+                                                value={comment}
                                             />
                                             <br />
-                                            <Button>Submit</Button>
+                                            <Button
+                                                type="submit"
+                                                variant="success"
+                                                className="mt-3 submit"
+                                                {...(submitting ? { disabled: true } : {})}
+                                                onClick={handleComment}
+                                            >
+                                                {submitting ? (
+                                                    <Spinner as="span" animation="border" role="status" />
+                                                ) : (
+                                                    "Publish"
+                                                )}
+                                            </Button>
                                         </div>
 
                                     </div>
 
                                     {
-                                        post.comment &&
-                                        post.comment.map(item => {
+
+                                        comments.map(item => {
                                             return (
-                                                <div key={item.comment_id} className="general-comment row">
+                                                <div key={item._id} className="general-comment row">
                                                     <div className="col-md-1 img-col ">
-                                                        <img src={avatar} className="name-avatar" />
+                                                        <img src="https://www.iconpacks.net/icons/2/free-user-icon-3297-thumb.png"
+                                                            className="name-avatar" />
                                                     </div>
                                                     <div className="area-comment col-md-11">
-                                                        <span>Thắng Ngô</span>
-                                                        <p>{item.message}</p>
+                                                        <span>{item._source.authorName}</span>
+                                                        <p>{item._source.content}</p>
                                                     </div>
                                                 </div>
                                             )

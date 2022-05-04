@@ -161,16 +161,14 @@ const searchPosts = async (req, res) => {
 }
 
 const getPostByUser = async (req, res) => {
-    const { userId } = req.params;
-    console.log(userId)
-
+    // const { userId } = req.params;
     try {
         const result = await client.search({
             index: userIndex,
             body: {
                 query: {
                     match: {
-                        author: userId
+                        authorId: req.user.id
                     }
                 }
             },

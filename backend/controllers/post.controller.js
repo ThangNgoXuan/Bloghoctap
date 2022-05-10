@@ -85,7 +85,8 @@ const getAllPost = async (req, res) => {
             size: size,
             // type: "_doc",
             body: {
-                query: { match_all: {} }
+                query: { match_all: {} },
+                sort: [{ publishedAt: { order: 'desc' } }],
             },
 
         });
@@ -141,11 +142,17 @@ const searchPosts = async (req, res) => {
             index: userIndex,
             body: {
                 query: {
-                    multi_match: {
-                        query: keyword,
-                        fields: ['title', 'tags', 'content']
+                    bool: {
+                        must: {
+                            multi_match: {
+                                query: keyword,
+                                fields: ['title^3', 'tags^2', 'content']
+                            }
+                        }
                     }
-                }
+
+                },
+                sort: [{ publishedAt: { order: 'asc' } }],
             },
 
         });

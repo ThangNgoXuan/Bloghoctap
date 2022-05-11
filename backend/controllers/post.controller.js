@@ -3,7 +3,7 @@ import client from '../connection.js';
 import slugify from 'slugify';
 import { v2 as cloudinary } from 'cloudinary'
 
-const userIndex = 'posts';
+const postIndex = 'posts';
 
 const { CLOUD_NAME, API_KEY, API_SECRET } = process.env;
 cloudinary.config({
@@ -56,7 +56,7 @@ const newPost = async (req, res) => {
     try {
         // let err;
         client.index({
-            index: userIndex,
+            index: postIndex,
             body: newPost
         }, function (err, resp) {
             if (resp.body) {
@@ -80,7 +80,7 @@ const getAllPost = async (req, res) => {
 
     try {
         const result = await client.search({
-            index: userIndex,
+            index: postIndex,
             from: from,
             size: size,
             // type: "_doc",
@@ -107,7 +107,7 @@ const getPostBySlug = async (req, res) => {
 
     try {
         const result = await client.search({
-            index: userIndex,
+            index: postIndex,
             body: {
                 query: {
                     match: {
@@ -139,7 +139,7 @@ const searchPosts = async (req, res) => {
 
     try {
         const result = await client.search({
-            index: userIndex,
+            index: postIndex,
             body: {
                 query: {
                     bool: {
@@ -171,7 +171,7 @@ const getPostByUser = async (req, res) => {
     // const { userId } = req.params;
     try {
         const result = await client.search({
-            index: userIndex,
+            index: postIndex,
             body: {
                 query: {
                     match: {
@@ -193,5 +193,80 @@ const getPostByUser = async (req, res) => {
     }
 }
 
+const listPostByTag = async (tag) => {
+    const result = await client.search({
+        index: postIndex,
+        size: 5,
+        body: {
+            query: {
+                match: {
+                    tags: tag
+                }
+            },
+        }
+    })
 
-export { newPost, getAllPost, getPostBySlug, searchPosts, getPostByUser }
+    const kq = result.body.hits.hits.map(item => {
+        return {
+            _id: item._id,
+            title: item._source.title,
+            authorName: item._source.authorName,
+            authorId: item._source.authorId,
+            likes: item._source.likes,
+            tags: item._source.tags,
+        }
+    });
+
+    return kq;
+}
+
+const getPopularTagsWithPost = async (req, res) => {
+    try {
+        const result = await client.search({
+            index: postIndex,
+            size: 0,
+            body: {
+                aggs: {
+                    tags: {
+                        terms: {
+                            field: "tags.keyword"
+                        }
+                    }
+                }
+            }
+
+        });
+
+        if (result?.body?.aggregations?.tags?.buckets) {
+            let tags = result.body.aggregations.tags.buckets.map((item) => item.key)
+            tags.splice(3)
+
+            const tag1 = await listPostByTag(tags[0])
+            const tag2 = await listPostByTag(tags[1])
+            const tag3 = await listPostByTag(tags[2])
+
+            const listPosts = [
+                {
+                    tag: tags[0],
+                    data: tag1
+                },
+                {
+                    tag: tags[1],
+                    data: tag2
+                },
+                {
+                    tag: tags[2],
+                    data: tag3
+                }
+            ]
+
+            res.send(listPosts)
+        }
+    } catch (error) {
+        console.log(error)
+        let err = error.name ? { error: error.name } : error
+        res.send(err);
+    }
+}
+
+export { newPost, getAllPost, getPostBySlug, searchPosts, getPostByUser, getPopularTagsWithPost }

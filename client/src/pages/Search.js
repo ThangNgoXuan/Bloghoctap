@@ -16,6 +16,7 @@ export default function Search() {
     const [loading, setLoading] = useState(true);
     const [posts, setPosts] = useState([]);
     const { query } = useParams();
+    const searchWords = query.split(/\s/).filter(word => word)
     let keyword = query;
 
     let location = useLocation();
@@ -76,7 +77,9 @@ export default function Search() {
                             <div className="col-7">
 
                                 {posts.length === 0 && <h1>Không tìm thấy bài viết</h1>}
+
                                 {
+
                                     posts.map((post) => {
                                         return (
                                             <div key={post._id} className="blog-item">

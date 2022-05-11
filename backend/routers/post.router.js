@@ -1,6 +1,6 @@
 import express from 'express';
 const postRouter = express.Router();
-import { newPost, getAllPost, getPostBySlug, searchPosts, getPostByUser } from '../controllers/post.controller.js'
+import { newPost, getAllPost, getPostBySlug, searchPosts, getPostByUser, getPopularTagsWithPost } from '../controllers/post.controller.js'
 import multer from 'multer';
 import { isAuth } from '../middleware/auth.middleware.js';
 
@@ -15,6 +15,7 @@ const upload = multer({ storage: storage });
 
 postRouter.route('/mypost').post(isAuth, getPostByUser);
 postRouter.route('/search').get(searchPosts);
+postRouter.route('/tags-posts-popular').get(getPopularTagsWithPost);
 postRouter.route('/:slug').get(getPostBySlug);
 
 postRouter.route('/')

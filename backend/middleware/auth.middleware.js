@@ -40,5 +40,4 @@ export const isAuth = async (req, res, next) => {
         //res.send({ message: error.message });
         console.log(error)
     }
-
 };

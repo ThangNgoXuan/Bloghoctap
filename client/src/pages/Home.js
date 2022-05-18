@@ -1,40 +1,68 @@
 import Axios from 'axios';
-import Footer from "../component/Footer"
-import NavBar from "../component/NavBar"
 import React, { useState, useEffect } from "react"
-import "../css/home.css"
-import "../css/search.css"
 import { Container } from "react-bootstrap"
 import avatar from "../image/avatar.jpg"
-import { FcLike } from "react-icons/fc"
+import { FcLike, FcLikePlaceholder } from "react-icons/fc"
 import { Link } from "react-router-dom"
 import { FaComments } from "react-icons/fa"
+import { RightSidebar } from '../component/RightSidebar';
+import Footer from "../component/Footer"
+import NavBar from "../component/NavBar"
+import "../css/home.css"
+import "../css/search.css"
 
 export default function Home() {
     const [posts, setPosts] = useState([]);
-
+    const [postByTag, setPostByTag] = useState([]);
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+    const userId = userInfo?.id;
     useEffect(() => {
-        async function getPostList() {
-            try {
-                Axios.get("http://localhost:5000/api/post").then(result => {
-                    // console.log(result.data)
-                    if (result.data.data && result.data.total >= 1) {
-                        setPosts(result.data.data)
-                        // console.log(result.data.data)
-                    }
-                })
 
-            } catch (error) {
-                console.log(error)
-            }
-
-        }
         getPostList();
+        getPostByTag();
     }, [])
-    console.log(posts)
+    // console.log(posts)
+    async function getPostList() {
+        try {
+            Axios.get("http://localhost:5000/api/post").then(result => {
+                // console.log(result.data)
+                if (result.data.data && result.data.total >= 1) {
+                    setPosts(result.data.data)
+                    // console.log(result.data.data)
+                }
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    async function getPostByTag() {
+        try {
+            Axios.get("http://localhost:5000/api/post/tags-posts-popular").then(result => {
+                if (result.data) {
+                    setPostByTag(result.data)
+                }
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const handleLikePost = (postId) => {
+        if (userId) {
+            Axios.get(`http://localhost:5000/api/post/like/${postId}/${userId}`).then(result => {
+                if (result) {
+                    setTimeout(() => {
+                        getPostList()
+                    }, 1000)
+                }
+            })
+        }
+    }
 
-
-
+    const checkLikes = (likes) => {
+        if (likes.includes(userId))
+            return true
+        return false
+    }
 
     return (
         <>
@@ -64,19 +92,27 @@ export default function Home() {
                                                         <div className='tag-post'>
                                                             {
                                                                 post._source.tags.map((item, i) =>
-                                                                    <span>{item}</span>
+                                                                    <span key={i}>{item}</span>
                                                                 )
                                                             }
 
                                                         </div>
                                                         {post._source.title}
                                                         <br />
-                                                        <FcLike /><span>{post._source.likes.length}</span>
-                                                        {/* <AiFillLike /><span>5 Reactions</span> */}
-                                                        <FaComments /><span>Comments</span>
+
                                                     </div>
                                                 </div>
                                             </Link>
+                                            <div className='blog-reaction-icon'>
+                                                {
+                                                    checkLikes(post?._source?.likes) ?
+                                                        <FcLike onClick={() => handleLikePost(post._id)} />
+                                                        : <FcLikePlaceholder onClick={() => handleLikePost(post._id)} />
+                                                }
+                                                <span className='like-count'>{post._source.likes.length}</span>
+                                                {/* <AiFillLike /><span>5 Reactions</span> */}
+                                                <FaComments /><span className='comment-count'>Comments</span>
+                                            </div>
                                         </div>
                                     )
                                 })
@@ -84,70 +120,10 @@ export default function Home() {
 
                         </div>
 
-                        <div className="col-3 more-area">
-                            <div className="more-area-header"></div>
-                            <div className="more-area-tag">
-                                <div className="tag-header">#tagname</div>
-                                <div className="tag-content">
-                                    Bạn có biết công việc của UX Designer là gì? - Nguyễn Đức Lượng
-                                    <br />
-                                    <span className="tag-content-comment">3 comments</span>
-                                </div>
-                                <div className="tag-content">
-                                    Bạn có biết công việc của UX Designer là gì? - Nguyễn Đức Lượng
-                                    <br />
-                                    <span className="tag-content-comment">3 comments</span>
-                                </div>
-                                <div className="tag-content">
-                                    Bạn có biết công việc của UX Designer là gì? - Nguyễn Đức Lượng
-                                    <br />
-                                    <span className="tag-content-comment">3 comments</span>
-                                </div>
-                            </div>
-
-                            {/* tag1 */}
-                            <div className="more-area-tag">
-                                <div className="tag-header">#tagname</div>
-                                <div className="tag-content">
-                                    Bạn có biết công việc của UX Designer là gì? - Nguyễn Đức Lượng
-                                    <br />
-                                    <span className="tag-content-comment">3 comments</span>
-                                </div>
-                                <div className="tag-content">
-                                    Bạn có biết công việc của UX Designer là gì? - Nguyễn Đức Lượng
-                                    <br />
-                                    <span className="tag-content-comment">3 comments</span>
-                                </div>
-                                <div className="tag-content">
-                                    Bạn có biết công việc của UX Designer là gì? - Nguyễn Đức Lượng
-                                    <br />
-                                    <span className="tag-content-comment">3 comments</span>
-                                </div>
-                            </div>
-
-                            {/* tag2 */}
-                            <div className="more-area-tag">
-                                <div className="tag-header">#tagname</div>
-                                <div className="tag-content">
-                                    Bạn có biết công việc của UX Designer là gì? - Nguyễn Đức Lượng
-                                    <br />
-                                    <span className="tag-content-comment">3 comments</span>
-                                </div>
-                                <div className="tag-content">
-                                    Bạn có biết công việc của UX Designer là gì? - Nguyễn Đức Lượng
-                                    <br />
-                                    <span className="tag-content-comment">3 comments</span>
-                                </div>
-                                <div className="tag-content">
-                                    Bạn có biết công việc của UX Designer là gì? - Nguyễn Đức Lượng
-                                    <br />
-                                    <span className="tag-content-comment">3 comments</span>
-                                </div>
-                            </div>
-                        </div>
+                        <RightSidebar posts={postByTag} />
                     </div>
                 </Container>
-            </div>
+            </div >
             <Footer />
         </>
     )

@@ -34,18 +34,6 @@ export default function NavBar() {
     if (userInfo) {
       setLoggedIn(true);
       setName(userInfo.name)
-      // axios
-      //   .post(`${process.env.REACT_APP_BASE_URL}/api/user/data`, {
-      //     token: localStorage.getItem("token"),
-      //   })
-      //   .then((res) => {
-      //     setName(res.data.name);
-      //     setEmail(res.data.email);
-      //   })
-      //   .catch((err) => {
-      //     localStorage.removeItem("token");
-      //     setLoggedIn(false);
-      //   });
     }
   }, []);
 

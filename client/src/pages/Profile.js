@@ -8,6 +8,7 @@ import { FaComments } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom"
 import axios from "axios"
 import { FcLike } from "react-icons/fc"
+import { Button } from "react-bootstrap"
 
 export default function Profile() {
     const navigate = useNavigate();
@@ -70,7 +71,9 @@ export default function Profile() {
         }
 
     }
-
+    const handleEdit = (slug) => {
+        navigate(`/editpost/${slug}`);
+    };
     return (
         <>
             <NavBar />
@@ -124,16 +127,36 @@ export default function Profile() {
                                                                         <span>{item}</span>
                                                                     )
                                                                 }
-
                                                             </div>
                                                             {post._source.title}
                                                             <br />
                                                             <FcLike /><span>{post._source.likes.length}</span>
                                                             {/* <AiFillLike /><span>5 Reactions</span> */}
-                                                            <FaComments /><span>Comments</span>
+                                                            {/* <FaComments /><span>Comments</span> */}
+
                                                         </div>
                                                     </div>
                                                 </Link>
+                                                <div className="profile-post-button-control">
+                                                    <Button
+                                                        className="edit-button"
+                                                        variant="info"
+                                                        onClick={() => {
+                                                            handleEdit(post._source.slug);
+                                                        }}
+                                                    >
+                                                        Edit
+                                                    </Button>
+                                                    <Button
+                                                        className="edit-button"
+                                                        variant="danger"
+                                                    // onClick={() => {
+                                                    //   handleDelete(blog._id);
+                                                    // }}
+                                                    >
+                                                        Delete
+                                                    </Button>
+                                                </div>
                                             </div>
                                         )
                                     })
@@ -142,13 +165,7 @@ export default function Profile() {
                         </div>
                     </div>
                 </div>
-
-
-
             </div>
-
-
-
             <Footer />
 
         </>

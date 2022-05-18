@@ -96,7 +96,7 @@ export default function Blog() {
                             <div className="utilities">
                                 <div className="utility-item like">
                                     <AiFillLike />
-                                    <p className="total">{post.likes}</p>
+                                    <p className="total">{post?.likes?.length}</p>
                                 </div>
                                 <div className="utility-item comment">
                                     <FaComments />

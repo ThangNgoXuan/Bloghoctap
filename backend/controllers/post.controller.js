@@ -75,6 +75,69 @@ const newPost = async (req, res) => {
     }
 }
 
+const updatePost = async (req, res) => {
+    const { tags, isPublish = true, title, content, authorName, date, slug } = req.body
+    console.log(req.body)
+    let publishedAt = "";
+    if (isPublish) publishedAt = new Date();
+    let coverImg = "";
+    let cloudinaryId = ""
+    // console.log(req.body)
+    if (req.file) {
+        await cloudinary.uploader.upload(
+            req.file.path,
+            { folder: "blog" },
+            (err, result) => {
+                if (err) {
+                    res.status(500).json({
+                        error: "Internal server error",
+                    });
+                }
+                coverImg = result.secure_url;
+                console.log(coverImg)
+                cloudinaryId = result.public_id;
+            }
+        );
+    }
+
+    try {
+        const oldPost = await getPost(slug)
+        if (oldPost._id) {
+            // console.log(oldPost)
+            const newSlug = slugify(title)
+            let Post = {
+                title: title,
+                slug: newSlug,
+                tags: tags.split(",") || [],
+                content: content,
+                isPublish: isPublish,
+                authorName: req.user.name,
+            }
+
+            if (coverImg && cloudinaryId) {
+                Post = { ...Post, coverImg, cloudinaryId }
+            }
+
+            const updatedPost = await client.update({
+                index: postIndex,
+                id: oldPost._id,
+                body: {
+                    doc: Post
+                }
+            })
+
+            res.send({ slug: newSlug })
+        } else {
+            return res.status(404).send({ error: "Blog not found" });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error)
+    }
+
+}
+
+
 const getAllPost = async (req, res) => {
     const { from = 0, size = 10 } = req.query;
 
@@ -103,7 +166,6 @@ const getAllPost = async (req, res) => {
 
 const getPostBySlug = async (req, res) => {
     const { slug } = req.params;
-    console.log(slug)
 
     try {
         const result = await client.search({
@@ -150,11 +212,9 @@ const searchPosts = async (req, res) => {
                             }
                         }
                     }
-
                 },
                 sort: [{ publishedAt: { order: 'asc' } }],
             },
-
         });
         if (result.body) {
             const data = result.body.hits.hits;
@@ -214,6 +274,7 @@ const listPostByTag = async (tag) => {
             authorId: item._source.authorId,
             likes: item._source.likes,
             tags: item._source.tags,
+            slug: item._source.slug,
         }
     });
 
@@ -247,14 +308,17 @@ const getPopularTagsWithPost = async (req, res) => {
 
             const listPosts = [
                 {
+                    id: 1,
                     tag: tags[0],
                     data: tag1
                 },
                 {
+                    id: 2,
                     tag: tags[1],
                     data: tag2
                 },
                 {
+                    id: 3,
                     tag: tags[2],
                     data: tag3
                 }
@@ -269,4 +333,55 @@ const getPopularTagsWithPost = async (req, res) => {
     }
 }
 
-export { newPost, getAllPost, getPostBySlug, searchPosts, getPostByUser, getPopularTagsWithPost }
+const getPost = async (slug) => {
+    console.log(slug)
+    try {
+        const result = await client.search({
+            index: postIndex,
+            body: {
+                query: {
+                    match: {
+                        slug
+                    }
+                }
+            },
+
+        });
+        if (result.body) {
+            const data = result.body.hits.hits[0];
+            return data
+        }
+    } catch (error) {
+        // let err = error.name ? { error: error.name } : error
+        // res.send(err);
+        return false
+    }
+}
+
+const likePost = async (req, res) => {
+    const { postId, userId } = req.params;
+    try {
+        const result = await client.update({
+            index: 'posts',
+            id: postId,
+            body: {
+                script: {
+                    source: `if (ctx._source.likes.contains(params.likes)) { 
+                  ctx._source.likes.remove(ctx._source.likes.indexOf(params.likes)) 
+                } else {
+                  ctx._source.likes.add(params.likes)}`,
+                    lang: 'painless',
+                    params: {
+                        likes: userId,
+                    },
+                },
+            }
+        })
+        res.send(result)
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+
+export { newPost, getAllPost, getPostBySlug, searchPosts, getPostByUser, getPopularTagsWithPost, likePost, updatePost }

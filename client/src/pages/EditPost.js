@@ -11,16 +11,23 @@ import {
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import "../css/createpost.css"
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
-
+const getHashtag = (hashtag) => {
+    let tags = hashtag.split(/[\s,]+/).map(item => item.startsWith("#") ? item : ('#' + item));
+    return tags;
+}
 
 export default function Editpost() {
     const navigate = useNavigate();
+    const { slug } = useParams()
 
     const [title, setTitle] = useState("");
+    const [postId, setPostId] = useState("");
     const [content, setContent] = useState("");
+    const [tags, setTags] = useState([]);
+    const [tagText, setTagText] = useState("");
     const [image, setImage] = useState(null);
     const [imageData, setImageData] = useState(null);
     const [imageName, setImageName] = useState("");
@@ -28,17 +35,37 @@ export default function Editpost() {
     const [error, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
-    /*     useEffect(() => {
-            if (!localStorage.getItem("token")) {
-              navigate("/login");
+    useEffect(() => {
+        async function getPost() {
+            try {
+                await axios.get(`http://localhost:5000/api/post/${slug}`).then(result => {
+                    // console.log(result.data)
+                    if (result?.data?.data) {
+                        const post = result.data.data[0];
+                        // console.log(post)
+                        setPostId(post._id);
+                        setContent(post._source.content)
+                        setTitle(post._source.title);
+                        setImageData(post._source.coverImg);
+                        setImage(post._source.coverImg);
+                        setTags(post._source.tags);
+                        setTagText(post._source?.tags?.join(' '))
+                    }
+                })
+
+            } catch (error) {
+                console.log(error)
             }
-          }, [navigate]); */
+
+        }
+        getPost();
+    }, [])
 
     const handleSubmit = (e) => {
         e.preventDefault();
         setSubmitting(true);
         const sanitizeContent = content.trim();
-        if (sanitizeContent.length < 200) {
+        if (sanitizeContent.length < 20) {
             setError(true);
             setErrorMessage("Content must be at least 200 characters long");
             setSubmitting(false);
@@ -49,25 +76,30 @@ export default function Editpost() {
             return;
         }
         const formData = new FormData();
+        formData.append("slug", slug);
         formData.append("title", title);
         formData.append("content", sanitizeContent);
         formData.append("image", imageData);
+        formData.append("tags", tags);
         formData.append("date", new Date());
-        formData.append("token", localStorage.getItem("token"));
+        formData.append("token", JSON.parse(localStorage.getItem("userInfo")).token);
+
         axios({
-            method: "post",
-            url: `${process.env.REACT_APP_BASE_URL}/api/user/create`,
+            method: "put",
+            url: `${process.env.REACT_APP_BASE_URL}/api/post`,
             data: formData,
         })
             .then((res) => {
                 setSubmitting(false);
-                navigate("/");
+                if (res?.data?.slug) {
+                    navigate("/blog/" + res?.data?.slug);
+                }
             })
             .catch((err) => {
                 setSubmitting(false);
                 setError(true);
                 setErrorMessage(err.response.data.error);
-                navigate("/login");
+                console.log(err)
             });
     };
     return (
@@ -79,7 +111,7 @@ export default function Editpost() {
                     <Card>
                         <Card.Body>
                             <h1 className="heading">Edit Post</h1>
-                            <Form>
+                            <Form onSubmit={handleSubmit}>
                                 <Form.Group className="mb-3">
                                     <Form.Label>Add a cover image
                                         <Form.Control
@@ -117,15 +149,44 @@ export default function Editpost() {
                                     <Form.Control
                                         type="text"
                                         placeholder="New post title here ..."
+                                        value={title}
+                                        onChange={(e) => {
+                                            setTitle(e.target.value);
+                                        }}
+                                        required
                                     />
-                                    <input
+
+                                    {/* <input
                                         type="text"
                                         placeholder="Add 4 Tag Name"
                                         className="addtagname"
-                                    />
+                                        required
+                                    /> */}
+                                </Form.Group>
+                                <Form.Group>
+                                    <Form.Label>
+                                        <Form.Control
+                                            className="add-tagname"
+                                            type="text"
+                                            placeholder="Add up to 4 tags..."
+                                            value={tagText}
+                                            onChange={(e) => {
+                                                setTagText(e.target.value);
+                                                setTags(getHashtag((e.target.value)))
+                                            }}
+                                            required
+                                        />
+                                        {tags.join(" ")}
+                                    </Form.Label>
+
                                 </Form.Group>
                                 <CKEditor
                                     editor={ClassicEditor}
+                                    data={content}
+                                    onChange={(event, editor) => {
+                                        const data = editor.getData();
+                                        setContent(data);
+                                    }}
                                 />
                                 <Button
                                     type="submit"

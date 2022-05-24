@@ -158,30 +158,34 @@ const getAll = async (req, res) => {
 
 const getUserProfile = async (req, res) => {
 
-    const { _id } = req.body;
+    try {
+        const { _id } = req.body;
 
-    const user = await client.search({
-        index: userIndex,
-        body: {
-            query: {
-                match: {
-                    _id: _id
+        const user = await client.search({
+            index: userIndex,
+            body: {
+                query: {
+                    match: {
+                        _id: _id
+                    }
                 }
             }
-        }
-    });
+        });
 
-    if (user && user.body.hits.total.value >= 1) {
-        const data = user.body.hits.hits[0];
-        const userProfile = {
-            _id: data._id,
-            name: data._source.name,
-            email: data._source.email,
-            avatar: data._source.avatar,
+        if (user && user.body.hits.total.value >= 1) {
+            const data = user.body.hits.hits[0];
+            const userProfile = {
+                _id: data._id,
+                name: data._source.name,
+                email: data._source.email,
+                avatar: data._source.avatar,
+            }
+            res.status(200).send(userProfile);
+        } else {
+            res.status(404).send({ error: "Không tìm thấy user" })
         }
-        res.status(200).send(userProfile);
-    } else {
-        res.status(401).send({ error: "Không tìm thấy user" })
+    } catch (error) {
+        res.status(404).send(error);
     }
 }
 
@@ -190,7 +194,6 @@ const searchUser = async (req, res) => {
     //  console.log(query)
     if (query) {
         try {
-
             const result = await client.search({
                 index: userIndex,
                 body: {
@@ -201,7 +204,6 @@ const searchUser = async (req, res) => {
                             // type: 'phrase_prefix',
                         }
                     },
-
                 }
             });
             if (result) {
@@ -214,7 +216,86 @@ const searchUser = async (req, res) => {
             res.send(err);
         }
     }
-
 }
 
-export { registUser, loginUser, getAll, getUserProfile, searchUser }
+const getUserById = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const user = await client.get({
+            index: userIndex,
+            _source_excludes: 'password',
+            id: userId,
+        })
+        if (user?.body?._source) {
+            res.send(user.body._source);
+        } else {
+            res.status(404).send({ error: "Không tìm thấy user" })
+        }
+    } catch (error) {
+        res.status(404).send(error)
+    }
+    return;
+}
+
+const followUser = (req, res) => {
+    try {
+        const { userId, authorId } = req.body;
+        if (userId !== authorId) {
+            client.update({
+                index: 'users',
+                id: userId,
+                body: {
+                    script: {
+                        source: `if (ctx._source.following.contains(params.authorId)) { 
+                    ctx._source.following.remove(ctx._source.following.indexOf(params.authorId))
+                   }
+                   else {
+                     ctx._source.following.add(params.authorId)
+                    }`,
+                        lang: 'painless',
+                        params: {
+                            authorId: authorId,
+                        },
+                    },
+                },
+                refresh: true,
+            }, (err, result) => {
+                res.send({ success: "Followed!" })
+            })
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const getListFolowOfUser = async (req, res) => {
+
+    try {
+        const { userId } = req.params;
+        client.search({
+            index: userIndex,
+            _source_includes: 'following',
+            body: {
+                query: {
+                    bool: {
+                        should: {
+                            terms: {
+                                _id: userId,
+                            },
+                        },
+                    },
+                },
+            }
+        }, (err, result) => {
+            // res.send(})
+            console.log(result)
+            if (err) {
+                res.send(err)
+            }
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export { registUser, loginUser, getAll, getUserProfile, searchUser, getUserById, followUser, getListFolowOfUser }

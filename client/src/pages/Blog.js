@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import Axios from 'axios'
 import "../css/blog.css"
 import {
     Container,
@@ -13,10 +14,13 @@ import { FaComments } from "react-icons/fa"
 import { MdMoreHoriz } from "react-icons/md"
 import avatar from "../image/avatar.jpg"
 import { useNavigate, useParams } from 'react-router-dom'
-import Axios from 'axios'
+import commentApi from "../api/commentApi"
+import { Link } from "react-router-dom"
+import postApi from "../api/postApi"
 
 export default function Blog() {
     const [post, setPost] = useState({});
+    const [authorPosts, setAuthorPosts] = useState([]);
     const [submitting, setSubmitting] = useState(false);
     const [comment, setComment] = useState("");
     const [comments, setComments] = useState([]);
@@ -35,24 +39,33 @@ export default function Blog() {
                         setPost(result.data.data[0]._source)
                         setPostId(result.data.data[0]._id);
                         getComment(result.data.data[0]._id);
-                        // console.log(result.data.data[0])
+                        getSamePostAuthor(result.data.data[0]._source.authorId)
                     }
                 })
 
             } catch (error) {
                 console.log(error)
             }
+        }
 
+        function getSamePostAuthor(authorId) {
+            try {
+                postApi.samePostOfAuthor(authorId, 5).then(result => {
+                    setAuthorPosts(result)
+
+                })
+            } catch (error) {
+                console.log(error)
+            }
         }
         getPost();
 
-    }, [])
+    }, [slug])
     async function getComment(postId) {
 
         try {
             await Axios.get(`http://localhost:5000/api/comment/${postId}`).then(result => {
                 if (result.data.data) {
-                    console.log(result.data.data)
                     setComments(result.data.data)
                 }
             })
@@ -65,13 +78,7 @@ export default function Blog() {
     const handleComment = () => {
         if (comment) {
             setSubmitting(true);
-            Axios.post("http://localhost:5000/api/comment",
-                {
-                    content: comment,
-                    postId: postId,
-                    token: JSON.parse(localStorage.getItem("userInfo")).token
-                }
-            )
+            commentApi.newComment({ content: comment, postId: postId })
                 .then((res) => {
                     setSubmitting(false);
                     getComment(postId)
@@ -80,10 +87,8 @@ export default function Blog() {
                     setSubmitting(false);
                     setError(true);
                     setErrorMessage(err.response.data.error);
-                    navigate("/login");
                 });
         }
-
     };
 
     return (
@@ -100,7 +105,7 @@ export default function Blog() {
                                 </div>
                                 <div className="utility-item comment">
                                     <FaComments />
-                                    <p className="total">0</p>
+                                    <p className="total">{comments?.length || 0}</p>
                                 </div>
                                 <div className="utility-item more">
                                     <MdMoreHoriz />
@@ -187,11 +192,9 @@ export default function Blog() {
                                     }
 
                                 </div>
-
-
                             </div>
                         </div>
-                        <div className="col col-md-3 not3">
+                        <div className="col col-md-3 not3 right-bar">
                             <div className="follow-container">
                                 {/* <div className="header-black"></div> */}
                                 <div className="following">
@@ -201,6 +204,21 @@ export default function Blog() {
                                     </div>
                                     <Button>Following</Button>
                                 </div>
+                            </div>
+
+                            <div className="same-author-posts">
+                                <div className="header-same-posts">More from <span>{post.authorName}</span></div>
+                                {
+                                    authorPosts &&
+                                    authorPosts.map(item => {
+                                        return (
+                                            <Link to={`/blog/${item._source.slug}`} key={item._id} className="same-post-item">
+                                                <div className="same-post-title">{item._source.title}</div>
+                                                <div className="hashtags">{item._source.tags.join('  ')}</div>
+                                            </Link>
+                                        )
+                                    })
+                                }
                             </div>
                         </div>
                     </div>

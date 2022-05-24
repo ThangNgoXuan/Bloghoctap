@@ -102,11 +102,48 @@
     font-weight: 800;  
     line-height: 1.25;
 }
+.right-bar{
+    display: flex;
+    flex-direction: column;
+}
 
 .follow-container {
     width: 100%;
     position: relative;
     padding: 0 16px 16px;
+    margin-bottom: 20px;
+    min-height: 140px;
+}
+
+.same-author-posts{
+    width: 100%;
+    position: relative;
+    padding: 0 16px 16px;
+    background-color: #fff;
+    border-radius: 5px;
+}
+
+.header-same-posts{
+    font-size: 18px;
+    font-weight: 700;
+    padding-top: 8px;
+}
+
+.header-same-posts span{
+    color: #3b49df;
+}
+
+.same-post-item{
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+.same-post-title{
+    padding-top: 10px;
+}
+.same-post-item .hashtags{
+    color: rgb(77, 71, 71);
+    padding: 10px 0;
 }
 
 .follow-container .header-black {

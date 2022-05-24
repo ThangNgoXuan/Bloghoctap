@@ -10,6 +10,7 @@ import Footer from "../component/Footer"
 import NavBar from "../component/NavBar"
 import "../css/home.css"
 import "../css/search.css"
+import postApi from '../api/postApi';
 
 export default function Home() {
     const [posts, setPosts] = useState([]);
@@ -48,12 +49,8 @@ export default function Home() {
     }
     const handleLikePost = (postId) => {
         if (userId) {
-            Axios.get(`http://localhost:5000/api/post/like/${postId}/${userId}`).then(result => {
-                if (result) {
-                    setTimeout(() => {
-                        getPostList()
-                    }, 1000)
-                }
+            postApi.likePost(postId, userId).then(result => {
+                getPostList();
             })
         }
     }

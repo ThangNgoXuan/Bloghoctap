@@ -46,7 +46,21 @@ export default function Profile() {
                     navigate("/login");
                 });
 
+            function countComment() {
+                try {
+                    axios.get(`${process.env.REACT_APP_BASE_URL}/api/comment/count`, {
+                        token: userInfo.token,
+                        _id: userInfo.id
+                    }).then(result => {
+                        console.log(result?.data)
+                    })
+                    return;
+                } catch (error) {
+                    console.log(error)
+                }
+            }
             getPostList();
+            countComment()
         } else {
             setInterval(() => {
                 setLoading(false);
@@ -57,7 +71,7 @@ export default function Profile() {
 
     async function getPostList() {
         try {
-            axios.post("http://localhost:5000/api/post/mypost",
+            axios.post(`${process.env.REACT_APP_BASE_URL}/api/post/mypost`,
                 { token: JSON.parse(localStorage.getItem("userInfo")).token }
             ).then(result => {
 
@@ -69,7 +83,6 @@ export default function Profile() {
         } catch (error) {
             console.log(error)
         }
-
     }
     const handleEdit = (slug) => {
         navigate(`/editpost/${slug}`);

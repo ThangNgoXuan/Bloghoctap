@@ -55,20 +55,12 @@ const newPost = async (req, res) => {
 
     try {
         // let err;
-        client.index({
+        await client.index({
             index: postIndex,
-            body: newPost
-        }, function (err, resp) {
-            if (resp.body) {
-                console.log(resp.body)
-                res.send({ success: "Add blog success!" })
-                return;
-            } else if (err) {
-                console.log(err)
-                res.status(404).send({ error: err });
-                return;
-            }
-        });
+            body: newPost,
+            refresh: true,
+        })
+        res.status(201).send({ success: "Add blog success!" })
     } catch (error) {
         res.send(error);
         console.log(error)
@@ -77,7 +69,6 @@ const newPost = async (req, res) => {
 
 const updatePost = async (req, res) => {
     const { tags, isPublish = true, title, content, authorName, date, slug } = req.body
-    console.log(req.body)
     let publishedAt = "";
     if (isPublish) publishedAt = new Date();
     let coverImg = "";
@@ -118,12 +109,13 @@ const updatePost = async (req, res) => {
                 Post = { ...Post, coverImg, cloudinaryId }
             }
 
-            const updatedPost = await client.update({
+            await client.update({
                 index: postIndex,
                 id: oldPost._id,
                 body: {
                     doc: Post
-                }
+                },
+                refresh: true,
             })
 
             res.send({ slug: newSlug })
@@ -228,7 +220,6 @@ const searchPosts = async (req, res) => {
 }
 
 const getPostByUser = async (req, res) => {
-    // const { userId } = req.params;
     try {
         const result = await client.search({
             index: postIndex,
@@ -237,14 +228,42 @@ const getPostByUser = async (req, res) => {
                     match: {
                         authorId: req.user.id
                     }
-                }
+                },
+                sort: [{ publishedAt: { order: 'desc' } }],
             },
-
+            size: amount
         });
         if (result.body) {
-            // console.log(result)
             const data = result.body.hits.hits;
             res.send({ total: data.length, data });
+            return;
+        }
+    } catch (error) {
+        let err = error.name ? { error: error.name } : error
+        res.send(err);
+    }
+}
+
+const getPostsOfAuthor = async (req, res) => {
+
+    try {
+        const { userId, amount = 5 } = req.params;
+        const result = await client.search({
+            index: postIndex,
+            body: {
+                query: {
+                    match: {
+                        authorId: userId
+                    }
+                },
+                sort: [{ publishedAt: { order: 'desc' } }],
+            },
+            size: amount,
+        });
+        if (result?.body) {
+            console.log(result)
+            const data = result?.body?.hits?.hits;
+            res.send(data);
             return;
         }
     } catch (error) {
@@ -361,7 +380,7 @@ const getPost = async (slug) => {
 const likePost = async (req, res) => {
     const { postId, userId } = req.params;
     try {
-        const result = await client.update({
+        client.update({
             index: 'posts',
             id: postId,
             body: {
@@ -375,13 +394,24 @@ const likePost = async (req, res) => {
                         likes: userId,
                     },
                 },
-            }
+            },
+            refresh: true,
+        }, (err, result) => {
+            res.send({ success: "Liked!" })
         })
-        res.send(result)
     } catch (error) {
         console.log(error)
     }
-
 }
 
-export { newPost, getAllPost, getPostBySlug, searchPosts, getPostByUser, getPopularTagsWithPost, likePost, updatePost }
+export {
+    newPost,
+    getAllPost,
+    getPostBySlug,
+    searchPosts,
+    getPostByUser,
+    getPopularTagsWithPost,
+    likePost,
+    updatePost,
+    getPostsOfAuthor,
+}

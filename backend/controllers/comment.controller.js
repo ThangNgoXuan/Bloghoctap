@@ -17,17 +17,14 @@ const newComment = async (req, res) => {
                 parentId,
                 authorName: req.user.name,
                 like
-            }
+            },
+            refresh: true,
         }, async function (err, resp) {
             if (resp.body) {
-                // console.log(resp.body)
-                await client.indices.refresh({ index: 'comments' });
                 res.send({ success: "Add comment success!" })
-                return;
             } else if (err) {
                 console.log(err)
                 res.status(404).send({ error: err });
-                return;
             }
         });
     } catch (error) {
@@ -71,12 +68,36 @@ const getCommentByPost = async (req, res) => {
     }
 }
 
-const findCommentsReply = async (req, res) => {
+const countCommentedOfUser = async (req, res) => {
+    try {
+        const userId = req.user.id;
+        console.log(userId)
+        const result = await client.count({
+            index: Index,
+            body: {
+                query: {
+                    bool: {
+                        must: [
+                            {
+                                match: {
+                                    authorId: userId,
+                                },
+                            },
+                        ],
+                    },
+                },
+            },
 
+        });
+        res.send({ count: result.body.count, userId: userId })
+    } catch (error) {
+        let err = error.name ? { error: error.name } : error
+        res.send(err);
+    }
 }
 
 const replyComment = async (req, res) => {
 
 }
 
-export { newComment, getCommentByPost }
+export { newComment, getCommentByPost, countCommentedOfUser }

@@ -8,7 +8,9 @@ import { FaComments } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom"
 import axios from "axios"
 import { FcLike } from "react-icons/fc"
-import { Button } from "react-bootstrap"
+import { Button, ListGroup } from "react-bootstrap"
+import postApi from "../api/postApi"
+import userApi from "../api/userApi"
 
 export default function Profile() {
     const navigate = useNavigate();
@@ -17,42 +19,41 @@ export default function Profile() {
     const [avatar, setAvatar] = useState("");
     const [email, setEmail] = useState("");
     const [blogs, setBlogs] = useState([]);
-    const [likedBlogs, setLikedBlogs] = useState([]);
-    const [isBlog, setIsBlog] = useState(true);
     const [loading, setLoading] = useState(true);
+    const [tags, setTags] = useState([]);
+    const [following, setFollowing] = useState([]);
+
     useEffect(() => {
         const userInfo = JSON.parse(localStorage.getItem("userInfo"));
         if (userInfo) {
-            axios
-                .post(`${process.env.REACT_APP_BASE_URL}/api/user/profile`, {
-                    token: userInfo.token,
-                    _id: userInfo.id
-                })
+            userApi.getUserProfile()
                 .then((res) => {
-                    setName(res.data.name);
-                    setEmail(res.data.email);
-                    setAvatar(res.data.avatar);
-                    //   setBlogs(res.data.blogs);
-                    //   setLikedBlogs(res.data.likedBlogs);
-                    // setInterval(() => {
-                    //     setLoading(false);
-                    // }, 1000);
-                    console.log(res.data)
+                    setName(res.name);
+                    setEmail(res.email);
+                    setAvatar(res.avatar);
+                    console.log(res)
                 })
                 .catch((err) => {
-                    // setInterval(() => {
-                    //     setLoading(false);
-                    // }, 1000);
                     navigate("/login");
                 });
 
+            postApi.getTagsOfUser().then(res => {
+                setTags(res)
+            }).catch(err => {
+                console.log(err)
+            })
+
+            userApi.listFollowing(userInfo.id).then(res => {
+                console.log("following")
+                console.log(res)
+            }).catch(err => {
+                console.log(err)
+            })
+
             function countComment() {
                 try {
-                    axios.get(`${process.env.REACT_APP_BASE_URL}/api/comment/count`, {
-                        token: userInfo.token,
-                        _id: userInfo.id
-                    }).then(result => {
-                        console.log(result?.data)
+                    postApi.countComment().then(result => {
+                        console.log(result)
                     })
                     return;
                 } catch (error) {
@@ -71,22 +72,21 @@ export default function Profile() {
 
     async function getPostList() {
         try {
-            axios.post(`${process.env.REACT_APP_BASE_URL}/api/post/mypost`,
-                { token: JSON.parse(localStorage.getItem("userInfo")).token }
-            ).then(result => {
-
-                if (result.data.data && result.data.total >= 1) {
-                    setBlogs(result.data.data)
-                }
-            })
-
+            postApi.myPost()
+                .then(result => {
+                    if (result.data && result.total >= 1) {
+                        setBlogs(result.data)
+                    }
+                })
         } catch (error) {
             console.log(error)
         }
     }
+
     const handleEdit = (slug) => {
         navigate(`/editpost/${slug}`);
     };
+
     return (
         <>
             <NavBar />
@@ -115,6 +115,24 @@ export default function Profile() {
                                         <li><BsFillFileEarmarkPostFill />{blogs.length} Posts</li>
                                     </ul>
                                 </div>
+                                {
+                                    following && following.length > 0 &&
+                                    <ListGroup className="list-follow">
+                                        <div className="list-follow-title">Your Following</div>
+                                        <ListGroup.Item>Cras justo odio</ListGroup.Item>
+                                        <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
+                                        <ListGroup.Item>Morbi leo risus</ListGroup.Item>
+                                        <ListGroup.Item>Porta ac consectetur ac</ListGroup.Item>
+                                        <ListGroup.Item>Vestibulum at eros</ListGroup.Item>
+                                    </ListGroup>
+                                }
+                                <ListGroup className="list-tags">
+                                    <div className="list-tags-title">Your Tags</div>
+                                    {tags &&
+                                        tags.map((item, index) => <ListGroup.Item key={index}>{item}</ListGroup.Item>)
+                                    }
+
+                                </ListGroup>
                             </div>
                             <div className="col-8 ww">
                                 {
@@ -122,7 +140,10 @@ export default function Profile() {
                                         return (
                                             <div key={post._id} className="blog-item">
                                                 <Link to={`/blog/${post._source.slug}`}>
-                                                    <img src={post._source.coverImg} />
+                                                    {
+                                                        post._source.coverImg &&
+                                                        <img src={post._source.coverImg} />
+                                                    }
                                                     <div className="blog-item-content">
                                                         <div className="author">
                                                             <img src={avatar} />

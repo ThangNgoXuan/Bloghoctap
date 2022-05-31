@@ -85,16 +85,6 @@ export default function Signup() {
                         <Card.Body>
                             <Card.Title>Blog học tập Việt Nam</Card.Title>
                             <p className="talk-about"><a href="/">Bolg học tập Việt Nam</a> là cộng đồng trao đổi cho cái thành viên </p>
-
-                            <Button className="button-login button-google">
-                                <AiFillGoogleCircle /> Đăng kí với Google
-                            </Button>
-
-                            <Button className="button-login button-facebook">
-                                <AiFillFacebook /> Đăng kí với Facebook
-                            </Button>
-                            <br />
-                            <p className="drop-line"> <hr /> Hoặc <hr /> </p>
                             <div className="error">{error && <p>{errorMsg}</p>}</div>
                             <Form noValidate validated={validated} onSubmit={handleSubmit}>
                                 <Form.Group className="mb-3">

@@ -194,11 +194,13 @@
 }
 
 .more-area-header {
-    background-color: #fff;
+    /* background-color: #fff; */
     border-radius: 5px;
     height: 32px;
     width: 100%;
     margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: 700;
 }
 
 .more-area-tag {

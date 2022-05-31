@@ -33,16 +33,15 @@ export default function Blog() {
     useEffect(() => {
         async function getPost() {
             try {
-                await Axios.get(`http://localhost:5000/api/post/${slug}`).then(result => {
-                    // console.log(result.data)
-                    if (result.data.data && result.data.total >= 1) {
-                        setPost(result.data.data[0]._source)
-                        setPostId(result.data.data[0]._id);
-                        getComment(result.data.data[0]._id);
-                        getSamePostAuthor(result.data.data[0]._source.authorId)
+                await postApi.getPostsBySlug(slug).then(result => {
+                    console.log(result.data)
+                    if (result?.data) {
+                        setPost(result.data[0]._source)
+                        setPostId(result.data[0]._id);
+                        getComment(result.data[0]._id);
+                        getSamePostAuthor(result.data[0]._source.authorId)
                     }
                 })
-
             } catch (error) {
                 console.log(error)
             }
@@ -64,12 +63,11 @@ export default function Blog() {
     async function getComment(postId) {
 
         try {
-            await Axios.get(`http://localhost:5000/api/comment/${postId}`).then(result => {
-                if (result.data.data) {
-                    setComments(result.data.data)
+            await commentApi.getCommentByPost(postId).then(result => {
+                if (result.data) {
+                    setComments(result.data)
                 }
             })
-
         } catch (error) {
             console.log(error)
         }
@@ -90,6 +88,10 @@ export default function Blog() {
                 });
         }
     };
+
+    // const handleFollowing = () =>{
+    //     following
+    // }
 
     return (
         <>

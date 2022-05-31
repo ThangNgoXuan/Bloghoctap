@@ -84,7 +84,10 @@ export default function Search() {
                                         return (
                                             <div key={post._id} className="blog-item">
                                                 <Link to={`/blog/${post._source.slug}`}>
-                                                    <img src={post._source.coverImg} />
+                                                    {
+                                                        post._source.coverImg &&
+                                                        <img src={post._source.coverImg} />
+                                                    }
                                                     <div className="blog-item-content">
                                                         <div className="author">
                                                             <img src={avatar} />
@@ -92,8 +95,15 @@ export default function Search() {
                                                         </div>
                                                         <div className="author-title">
                                                             {post._source.title}
+                                                            <div className='tag-post'>
+                                                                {
+                                                                    post._source.tags.map((item, i) =>
+                                                                        <span key={i}>{item}</span>
+                                                                    )
+                                                                }
+
+                                                            </div>
                                                             <br />
-                                                            <FcLike /><span>Reactions</span>
                                                         </div>
                                                     </div>
                                                 </Link>

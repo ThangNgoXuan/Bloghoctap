@@ -191,3 +191,40 @@
     margin-right: 10px;
     margin-bottom: 10px;
 }
+
+.list-follow{
+    margin-top: 20px;
+    max-height: 300px;
+    overflow-y: auto;
+    background-color: #f9fafa;
+}
+
+.list-follow-title{
+    font-size: 16;
+    font-weight: 600;
+    padding-left: 4px;
+    padding-bottom: 4px;
+
+}
+
+.list-tags{
+    margin-top: 20px;
+    max-height: 300px;
+    overflow-y: auto;
+    background-color:#f9fafa;
+}
+
+.list-tags-title{
+    font-size: 16;
+    font-weight: 600;
+    padding-bottom: 4px;
+    padding-left: 4px;
+}
+
+.list-tags > .list-group-item{
+    background-color:#f9fafa;
+}
+
+.list-follow > .list-group-item{
+    background-color:#f9fafa;
+}

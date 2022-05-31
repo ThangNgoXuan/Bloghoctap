@@ -5,7 +5,7 @@ export const RightSidebar = ({ posts }) => {
 
     return (
         <div className="col-3 more-area">
-            <div className="more-area-header">Popular</div>
+            <div className="more-area-header">Bài viết nổi bật</div>
             {posts && posts.length > 0 &&
                 posts.map((item, i) => {
                     return (

@@ -129,7 +129,6 @@ const updatePost = async (req, res) => {
 
 }
 
-
 const getAllPost = async (req, res) => {
     const { from = 0, size = 10 } = req.query;
 

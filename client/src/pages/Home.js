@@ -25,11 +25,9 @@ export default function Home() {
     // console.log(posts)
     async function getPostList() {
         try {
-            Axios.get("http://localhost:5000/api/post").then(result => {
-                // console.log(result.data)
-                if (result.data.data && result.data.total >= 1) {
-                    setPosts(result.data.data)
-                    // console.log(result.data.data)
+            postApi.getPosts().then(result => {
+                if (result.data) {
+                    setPosts(result.data)
                 }
             })
         } catch (error) {
@@ -38,9 +36,9 @@ export default function Home() {
     }
     async function getPostByTag() {
         try {
-            Axios.get("http://localhost:5000/api/post/tags-posts-popular").then(result => {
-                if (result.data) {
-                    setPostByTag(result.data)
+            postApi.getPostsByTag().then(result => {
+                if (result) {
+                    setPostByTag(result)
                 }
             })
         } catch (error) {
@@ -74,7 +72,10 @@ export default function Home() {
                                     return (
                                         <div key={post._id} className="blog-item">
                                             <Link to={`/blog/${post._source.slug}`}>
-                                                <img src={post._source.coverImg} />
+                                                {
+                                                    post._source.coverImg &&
+                                                    <img src={post._source.coverImg} />
+                                                }
                                                 <div className="blog-item-content">
                                                     <div className="author">
                                                         <img src={avatar} />
